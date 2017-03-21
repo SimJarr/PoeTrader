@@ -8,14 +8,16 @@ public class TradeOffer {
     private String buyCurrency;
     private String buyValue;
     private String ign;
+    private String stock;
 
-    public TradeOffer(String username, String sellCurrency, String sellValue, String buyCurrency, String buyValue, String ign) {
+    public TradeOffer(String username, String sellCurrency, String sellValue, String buyCurrency, String buyValue, String ign, String stock) {
         this.username = username;
         this.sellCurrency = sellCurrency;
         this.sellValue = sellValue;
         this.buyCurrency = buyCurrency;
         this.buyValue = buyValue;
         this.ign = ign;
+        this.stock = stock;
     }
 
     public String getUsername() {
@@ -40,5 +42,9 @@ public class TradeOffer {
 
     public String getIgn() {
         return ign;
+    }
+
+    public String getStock() {
+        return stock;
     }
 }
