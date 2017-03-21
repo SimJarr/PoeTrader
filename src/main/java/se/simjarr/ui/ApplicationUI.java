@@ -2,38 +2,56 @@ package se.simjarr.ui;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.ui.*;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 
 @SpringUI
 @Theme("valo")
 public class ApplicationUI extends UI {
 
     private TradeFinderUI tradeFinderUI;
+    private EstimatedValuesUI estimatedValuesUI;
     private HorizontalLayout layout;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         setupLayout();
+        addLeftSide();
         addTabs();
+        addEstimatedValuesPanel();
     }
 
     private void setupLayout() {
         layout = new HorizontalLayout();
         layout.setWidth("100%");
+        layout.setHeight("100%");
         layout.setMargin(true);
         setContent(layout);
     }
 
+    private void addLeftSide(){
+        VerticalLayout emptySide = new VerticalLayout();
+        layout.addComponent(emptySide);
+        layout.setExpandRatio(emptySide, 1);
+    }
+
     private void addTabs() {
         TabSheet tabSheet = new TabSheet();
-        tabSheet.setWidth("80%");
         tradeFinderUI = new TradeFinderUI();
         tabSheet.addTab(tradeFinderUI, "Hot Deals");
         tabSheet.addTab(new VerticalLayout(), "My Offers");
         tabSheet.addTab(new VerticalLayout(), "Simon Knows");
 
         layout.addComponent(tabSheet);
+        layout.setExpandRatio(tabSheet, 4);
+    }
+
+    private void addEstimatedValuesPanel(){
+        estimatedValuesUI = new EstimatedValuesUI();
+        layout.addComponent(estimatedValuesUI);
+        layout.setExpandRatio(estimatedValuesUI, 2);
     }
 }

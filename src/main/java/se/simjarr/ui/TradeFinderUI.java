@@ -57,7 +57,7 @@ public class TradeFinderUI extends VerticalLayout{
     private void addResponseText() {
         responseText = new TextArea("Response");
         responseText.setEnabled(false);
-        responseText.setWidth("50%");
+        responseText.setWidth("100%");
         this.addComponent(responseText);
     }
 
