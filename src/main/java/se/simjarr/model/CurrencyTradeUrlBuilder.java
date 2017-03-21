@@ -14,7 +14,7 @@ public class CurrencyTradeUrlBuilder {
         if(online) builder.append("x");
     }
 
-    public String getUrl() {
+    public String build() {
         return builder.toString();
     }
 

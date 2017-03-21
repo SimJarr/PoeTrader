@@ -63,7 +63,7 @@ public class ApplicationGui extends UI {
     private void setRequestUrl(CheckBoxGroup<CurrencyValue> have, CheckBoxGroup<CurrencyValue> want) {
         CurrencyTradeUrlBuilder urlBuilder = new CurrencyTradeUrlBuilder(HC_LEGACY, true);
         urlBuilder.setHave(have.getSelectedItems()).setWant(want.getSelectedItems());
-        url = urlBuilder.getUrl();
+        url = urlBuilder.build();
     }
 
     private List<TradeOffer> fetchTradeOffers() {
