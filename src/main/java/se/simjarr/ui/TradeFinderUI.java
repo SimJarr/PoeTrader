@@ -75,7 +75,7 @@ public class TradeFinderUI extends VerticalLayout{
             trades.forEach(tradeOffer -> {
                 //TODO: BeanParam ? ? ? ?
                 TradeOffer offer = new TradeOffer(tradeOffer.attr("data-username"), tradeOffer.attr("data-sellcurrency"), tradeOffer.attr("data-sellvalue"),
-                        tradeOffer.attr("data-buycurrency"), tradeOffer.attr("data-buyvalue"), tradeOffer.attr("data-ign"));
+                        tradeOffer.attr("data-buycurrency"), tradeOffer.attr("data-buyvalue"), tradeOffer.attr("data-ign"), tradeOffer.attr("data-stock"));
                 tradeOffers.add(offer);
             });
         } catch (IOException e) {
