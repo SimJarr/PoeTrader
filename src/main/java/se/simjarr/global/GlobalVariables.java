@@ -11,6 +11,8 @@ public abstract class GlobalVariables {
 
     public static final Set<CurrencyValue> CURRENCY;
 
+    public static int REFERENCE_CURRENCY = 4;
+
     static {
         CURRENCY = new HashSet<>();
         CURRENCY.add(new CurrencyValue("Chaos orb", "4"));
