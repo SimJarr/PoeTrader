@@ -37,7 +37,7 @@ public class CurrencyTradeUrlBuilder {
             sb.append("-");
         });
         int size = sb.toString().length();
-        sb.delete(size-1, size);
+        if(size > 0) sb.delete(size-1,size);
         return sb.toString();
     }
 }
