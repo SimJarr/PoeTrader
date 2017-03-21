@@ -1,8 +1,5 @@
 package se.simjarr.ui;
 
-import com.vaadin.annotations.Theme;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,30 +11,24 @@ import se.simjarr.model.TradeOffer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import static se.simjarr.global.GlobalVariables.*;
 
-@SpringUI
-@Theme("valo")
-public class ApplicationGui extends UI {
+import static se.simjarr.global.GlobalVariables.CURRENCY;
+import static se.simjarr.global.GlobalVariables.HC_LEGACY;
 
-    private VerticalLayout layout;
+public class TradeFinderUI extends VerticalLayout{
+
+    private TextArea responseText;
     private String url;
 
-    @Override
-    protected void init(VaadinRequest vaadinRequest) {
-        setupLayout();
+    public TradeFinderUI() {
         addHeader();
         addCurrencySelection();
-    }
-
-    private void setupLayout() {
-        layout = new VerticalLayout();
-        setContent(layout);
+        addResponseText();
     }
 
     private void addHeader() {
         Label header = new Label("poe-trade-application");
-        layout.addComponent(header);
+        this.addComponent(header);
     }
 
     private void addCurrencySelection() {
@@ -53,11 +44,21 @@ public class ApplicationGui extends UI {
         send.addClickListener(clickEvent -> {
             setRequestUrl(have, want);
             List<TradeOffer> tradeOffers = fetchTradeOffers();
-            tradeOffers.forEach(x -> System.out.println(x.getUsername()));
+
+            StringBuilder responseBuilder = new StringBuilder();
+            tradeOffers.forEach(x -> responseBuilder.append(x.getUsername()).append(", "));
+            responseText.setValue(responseBuilder.toString());
         });
 
         formLayout.addComponents(have, want, send);
-        layout.addComponent(formLayout);
+        this.addComponent(formLayout);
+    }
+
+    private void addResponseText() {
+        responseText = new TextArea("Response");
+        responseText.setEnabled(false);
+        responseText.setWidth("50%");
+        this.addComponent(responseText);
     }
 
     private void setRequestUrl(CheckBoxGroup<CurrencyValue> have, CheckBoxGroup<CurrencyValue> want) {
@@ -82,4 +83,5 @@ public class ApplicationGui extends UI {
         }
         return tradeOffers;
     }
+
 }
