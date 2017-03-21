@@ -1,4 +1,4 @@
-package se.simjar.ui;
+package se.simjarr.ui;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
@@ -7,14 +7,14 @@ import com.vaadin.ui.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import se.simjar.model.CurrencyTradeUrlBuilder;
-import se.simjar.model.CurrencyValue;
-import se.simjar.model.TradeOffer;
+import se.simjarr.model.CurrencyTradeUrlBuilder;
+import se.simjarr.model.CurrencyValue;
+import se.simjarr.model.TradeOffer;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import static se.simjar.global.GlobalVariables.*;
+import static se.simjarr.global.GlobalVariables.*;
 
 @SpringUI
 @Theme("valo")

@@ -1,4 +1,4 @@
-package se.simjar.model;
+package se.simjarr.model;
 
 public class CurrencyValue {
 

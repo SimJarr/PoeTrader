@@ -1,6 +1,6 @@
-package se.simjar.global;
+package se.simjarr.global;
 
-import se.simjar.model.CurrencyValue;
+import se.simjarr.model.CurrencyValue;
 
 import java.util.HashSet;
 import java.util.Set;
