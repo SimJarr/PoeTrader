@@ -8,6 +8,7 @@ import se.simjarr.model.TradeOffer;
 
 import java.util.List;
 
+import static se.simjarr.global.GlobalVariables.ESTIMATED_VALUES;
 import static se.simjarr.global.GlobalVariables.HC_LEGACY;
 import static se.simjarr.global.Currency.*;
 
@@ -42,7 +43,8 @@ public class TradeFinderUI extends VerticalLayout{
             List<TradeOffer> tradeOffers = HttpRequestHandler.fetchTradesFromUrl(url);
             StringBuilder responseBuilder = new StringBuilder();
             tradeOffers.forEach(x -> responseBuilder.append(x.getUsername()).append(", "));
-            responseText.setValue(responseBuilder.toString());
+            //TODO this is now my testing-output
+            responseText.setValue(ESTIMATED_VALUES.toString());
         });
 
         formLayout.addComponents(have, want, send);
