@@ -13,7 +13,7 @@ import com.vaadin.ui.VerticalLayout;
 public class ApplicationUI extends UI {
 
     private TradeFinderUI tradeFinderUI;
-    private EstimatedValuesUI estimatedValuesUI;
+    private EstimatedValuesContainer estimatedValuesContainer;
     private HorizontalLayout layout;
 
     @Override
@@ -50,8 +50,8 @@ public class ApplicationUI extends UI {
     }
 
     private void addEstimatedValuesPanel(){
-        estimatedValuesUI = new EstimatedValuesUI();
-        layout.addComponent(estimatedValuesUI);
-        layout.setExpandRatio(estimatedValuesUI, 2);
+        estimatedValuesContainer = new EstimatedValuesContainer();
+        layout.addComponent(estimatedValuesContainer);
+        layout.setExpandRatio(estimatedValuesContainer, 2);
     }
 }
