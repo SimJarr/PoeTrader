@@ -11,7 +11,7 @@ public enum Currency {
     EXALTED_ORB(6, "Exalted_Orb.png"),
     CHROMATIC_ORB(7, "Chromatic_Orb.png"),
     JEWELLERS_ORB(8, "Jeweller's_Orb.png"),
-    ORB_OF_CHANCE(9, "Orb_of_Alchemy.png"),
+    ORB_OF_CHANCE(9, "Orb_of_Chance.png"),
     CARTOGRAPHERS_CHISEL(10, "Cartographer's_Chisel.png"),
     ORB_OF_SCOURING(11, "Orb_of_Scouring.png"),
     BLESSED_ORB(12, "Blessed_Orb.png"),
@@ -29,7 +29,7 @@ public enum Currency {
     }
 
     public static Currency fromValue(int value) {
-        return Currency.values()[value];
+        return Currency.values()[value-1];
     }
 
     public String getImgPath() {

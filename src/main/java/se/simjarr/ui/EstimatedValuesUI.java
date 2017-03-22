@@ -25,34 +25,37 @@ public class EstimatedValuesUI extends GridLayout {
         this.setWidth("220px");
         this.setHeight("320px");
         this.setMargin(true);
-        generateMatrixGrid(5, 7);
+        generateMatrixGrid(16);
         addEstimatedValuesSection();
     }
 
     private void addEstimatedValuesSection() {
         String basePath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath() + "/WEB-INF/images/";
         FileResource first = new FileResource(new File(basePath + REFERENCE_CURRENCY.getImgPath()));
-        for (int i = 0; i <= 6; i++) {
-            FileResource second = new FileResource(new File(basePath + Currency.fromValue(i).getImgPath()));
-            this.getComponent(0, i).setIcon(first);
+        for (int i = 0; i < this.getRows(); i++) {
             if (i != REFERENCE_CURRENCY.getIntValue() - 1) {
-                calcEstimatedValue(Currency.fromValue(i), 5, i);
+                FileResource second = new FileResource(new File(basePath + Currency.fromValue(i + 1).getImgPath()));
+                this.getComponent(0, i).setIcon(first);
+
+                calcEstimatedValue(Currency.fromValue(i + 1), 5, i);
+
+                ((Label) this.getComponent(2, i)).setValue(" : ");
+                this.getComponent(4, i).setIcon(second);
             }
-            ((Label) this.getComponent(2, i)).setValue(" : ");
-            this.getComponent(4, i).setIcon(second);
+
         }
     }
 
-    private void generateMatrixGrid(final int columns, final int rows) {
+    private void generateMatrixGrid(final int rows) {
         this.removeAllComponents();
         this.setRows(rows);
-        this.setColumns(columns);
+        this.setColumns(5);
 
         for (int row = 0; row < this.getRows(); row++) {
             for (int col = 0; col < this.getColumns(); col++) {
                 final Label child = new Label("", ContentMode.HTML);
                 this.addComponent(child);
-                if (col == 0){
+                if (col == 0 || col == 4) {
                     this.setComponentAlignment(child, Alignment.MIDDLE_LEFT);
                 } else {
                     this.setComponentAlignment(child, Alignment.MIDDLE_CENTER);
@@ -95,7 +98,7 @@ public class EstimatedValuesUI extends GridLayout {
         } else {
             ((Label) this.getComponent(1, row)).setValue("1");
             this.setComponentAlignment(this.getComponent(1, row), Alignment.MIDDLE_RIGHT);
-            ((Label) this.getComponent(3, row)).setValue(new BigDecimal(1 / value).setScale(3, BigDecimal.ROUND_HALF_UP).toString());
+            ((Label) this.getComponent(3, row)).setValue(new BigDecimal(value).setScale(3, BigDecimal.ROUND_HALF_UP).toString());
             this.setComponentAlignment(this.getComponent(3, row), Alignment.MIDDLE_LEFT);
         }
     }
