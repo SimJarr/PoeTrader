@@ -1,5 +1,6 @@
 package se.simjarr.global;
 
+//TODO: Add images for each currency
 public enum Currency {
 
     ORB_OF_ALTERATION(1),
@@ -23,6 +24,10 @@ public enum Currency {
 
     Currency(int intValue) {
         this.intValue = intValue;
+    }
+
+    public static Currency fromValue(int value) {
+        return Currency.values()[value];
     }
 
     public int getIntValue() {
