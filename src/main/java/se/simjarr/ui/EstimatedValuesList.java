@@ -41,7 +41,6 @@ public class EstimatedValuesList extends GridLayout {
 
                 this.getComponent(4, i).setIcon(second);
             }
-
         }
     }
 
@@ -53,7 +52,6 @@ public class EstimatedValuesList extends GridLayout {
                 ratios.add(calcEstimatedValue(Currency.fromValue(i + 1), 5, i));
             }
         }
-
         updateRatios(ratios);
     }
 
@@ -71,7 +69,6 @@ public class EstimatedValuesList extends GridLayout {
                     this.getComponent(col, row).setWidth("50px");
                 } else {
                     this.setComponentAlignment(child, Alignment.MIDDLE_CENTER);
-
                 }
             }
         }
@@ -113,7 +110,7 @@ public class EstimatedValuesList extends GridLayout {
             this.setComponentAlignment(this.getComponent(3, r.getRow()), Alignment.MIDDLE_LEFT);
 
             ESTIMATED_VALUES.put(r.getCurrency(), 1 / r.getRatio());
-
         }
+        ESTIMATED_VALUES.put(REFERENCE_CURRENCY, 1.0);
     }
 }
