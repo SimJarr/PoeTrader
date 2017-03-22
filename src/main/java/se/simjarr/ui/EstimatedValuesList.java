@@ -112,7 +112,7 @@ public class EstimatedValuesList extends GridLayout {
             this.setComponentAlignment(this.getComponent(1, r.getRow()), Alignment.MIDDLE_RIGHT);
             this.setComponentAlignment(this.getComponent(3, r.getRow()), Alignment.MIDDLE_LEFT);
 
-            ESTIMATED_VALUES.put(r.getCurrency(), r.getRatio());
+            ESTIMATED_VALUES.put(r.getCurrency(), 1 / r.getRatio());
 
         }
     }
