@@ -4,15 +4,14 @@ import com.vaadin.ui.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import se.simjarr.global.Currency;
 import se.simjarr.model.CurrencyTradeUrlBuilder;
-import se.simjarr.model.CurrencyValue;
 import se.simjarr.model.TradeOffer;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static se.simjarr.global.GlobalVariables.CURRENCY;
 import static se.simjarr.global.GlobalVariables.HC_LEGACY;
 
 public class TradeFinderUI extends VerticalLayout{
@@ -34,17 +33,16 @@ public class TradeFinderUI extends VerticalLayout{
     private void addCurrencySelection() {
         HorizontalLayout formLayout = new HorizontalLayout();
 
-        CheckBoxGroup<CurrencyValue> have = new CheckBoxGroup<>();
-        have.setItems(CURRENCY);
+        CheckBoxGroup<Currency> have = new CheckBoxGroup<>();
+        have.setItems(Currency.CHAOS_ORB, Currency.BLESSED_ORB);
 
-        CheckBoxGroup<CurrencyValue> want = new CheckBoxGroup<>();
-        want.setItems(CURRENCY);
+        CheckBoxGroup<Currency> want = new CheckBoxGroup<>();
+        want.setItems(Currency.CHAOS_ORB, Currency.BLESSED_ORB);
 
         Button send = new Button("Send");
         send.addClickListener(clickEvent -> {
             setRequestUrl(have, want);
             List<TradeOffer> tradeOffers = fetchTradeOffers();
-
             StringBuilder responseBuilder = new StringBuilder();
             tradeOffers.forEach(x -> responseBuilder.append(x.getUsername()).append(", "));
             responseText.setValue(responseBuilder.toString());
@@ -61,7 +59,7 @@ public class TradeFinderUI extends VerticalLayout{
         this.addComponent(responseText);
     }
 
-    private void setRequestUrl(CheckBoxGroup<CurrencyValue> have, CheckBoxGroup<CurrencyValue> want) {
+    private void setRequestUrl(CheckBoxGroup<Currency> have, CheckBoxGroup<Currency> want) {
         CurrencyTradeUrlBuilder urlBuilder = new CurrencyTradeUrlBuilder(HC_LEGACY, true);
         urlBuilder.setHave(have.getSelectedItems()).setWant(want.getSelectedItems());
         url = urlBuilder.build();
@@ -85,3 +83,23 @@ public class TradeFinderUI extends VerticalLayout{
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

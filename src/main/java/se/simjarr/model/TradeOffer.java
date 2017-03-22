@@ -60,15 +60,15 @@ public class TradeOffer {
     //TODO: no good, we want a real one
     private double calculateRatioComparedToReference(){
 
-        int intSellCurrency = Integer.parseInt(sellCurrency);
-        int intSellValue = Integer.parseInt(sellValue);
-        int intBuyCurrency = Integer.parseInt(buyCurrency);
-        int intBuyValue = Integer.parseInt(buyValue);
+        double sellCurrency = Double.parseDouble(this.sellCurrency);
+        double sellValue = Double.parseDouble(this.sellValue);
+        double buyCurrency = Double.parseDouble(this.buyCurrency);
+        double buyValue = Double.parseDouble(this.buyValue);
 
-        if (intSellCurrency != REFERENCE_CURRENCY && intBuyCurrency != REFERENCE_CURRENCY){
+        if (sellCurrency != REFERENCE_CURRENCY && buyCurrency != REFERENCE_CURRENCY){
             return 0;
         }
 
-        return (intSellCurrency == REFERENCE_CURRENCY) ? intBuyValue/intSellValue : intSellValue/intBuyValue;
+        return (sellCurrency == REFERENCE_CURRENCY) ? buyValue/sellValue : sellValue/buyValue;
     }
 }
