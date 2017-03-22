@@ -15,12 +15,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static se.simjarr.global.GlobalVariables.HC_LEGACY;
-import static se.simjarr.global.GlobalVariables.REFERENCE_CURRENCY;
+import static se.simjarr.global.GlobalVariables.*;
 
 
 public class EstimatedValuesList extends GridLayout {
-
 
     public EstimatedValuesList() {
         this.addStyleName("outlined");
@@ -90,8 +88,8 @@ public class EstimatedValuesList extends GridLayout {
         }
 
         estimatedValue /= trades.size();
-        if (estimatedValue < 1) return new Ratio(estimatedValue, true, row);
-        else return new Ratio(estimatedValue, false, row);
+        if (estimatedValue < 1) return new Ratio(currency, estimatedValue, true, row);
+        else return new Ratio(currency, estimatedValue, false, row);
     }
 
     private List<TradeOffer> fetchTrades(Currency fromCurrency, Currency toCurrency, int size) {
@@ -113,6 +111,8 @@ public class EstimatedValuesList extends GridLayout {
             }
             this.setComponentAlignment(this.getComponent(1, r.getRow()), Alignment.MIDDLE_RIGHT);
             this.setComponentAlignment(this.getComponent(3, r.getRow()), Alignment.MIDDLE_LEFT);
+
+            ESTIMATED_VALUES.put(r.getCurrency(), r.getRatio());
 
         }
     }
