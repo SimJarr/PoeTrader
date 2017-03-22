@@ -1,15 +1,11 @@
 package se.simjarr.ui;
 
 import com.vaadin.ui.*;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import se.simjarr.global.Currency;
 import se.simjarr.model.CurrencyTradeUrlBuilder;
+import se.simjarr.model.HttpRequestHandler;
 import se.simjarr.model.TradeOffer;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static se.simjarr.global.GlobalVariables.HC_LEGACY;
@@ -43,7 +39,7 @@ public class TradeFinderUI extends VerticalLayout{
         Button send = new Button("Send");
         send.addClickListener(clickEvent -> {
             setRequestUrl(have, want);
-            List<TradeOffer> tradeOffers = fetchTradeOffers();
+            List<TradeOffer> tradeOffers = HttpRequestHandler.fetchTradesFromUrl(url);
             StringBuilder responseBuilder = new StringBuilder();
             tradeOffers.forEach(x -> responseBuilder.append(x.getUsername()).append(", "));
             responseText.setValue(responseBuilder.toString());
@@ -62,25 +58,9 @@ public class TradeFinderUI extends VerticalLayout{
 
     private void setRequestUrl(CheckBoxGroup<Currency> have, CheckBoxGroup<Currency> want) {
         CurrencyTradeUrlBuilder urlBuilder = new CurrencyTradeUrlBuilder(HC_LEGACY, true);
-        urlBuilder.setHave(have.getSelectedItems()).setWant(want.getSelectedItems());
+        urlBuilder.setHave(have.getSelectedItems().toArray(new Currency[have.getSelectedItems().size()]))
+                  .setWant(want.getSelectedItems().toArray(new Currency[want.getSelectedItems().size()]));
         url = urlBuilder.build();
-    }
-
-    private List<TradeOffer> fetchTradeOffers() {
-        List<TradeOffer> tradeOffers = new ArrayList<>();
-        try {
-            Document doc = Jsoup.connect(url).get();
-            Elements trades = doc.select(".displayoffer");
-            trades.forEach(tradeOffer -> {
-                //TODO: BeanParam ? ? ? ?
-                TradeOffer offer = new TradeOffer(tradeOffer.attr("data-username"), tradeOffer.attr("data-sellcurrency"), tradeOffer.attr("data-sellvalue"),
-                        tradeOffer.attr("data-buycurrency"), tradeOffer.attr("data-buyvalue"), tradeOffer.attr("data-ign"), tradeOffer.attr("data-stock"));
-                tradeOffers.add(offer);
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return tradeOffers;
     }
 
 }
