@@ -26,18 +26,20 @@ public class EstimatedValuesUI extends GridLayout {
         this.setHeight("320px");
         this.setMargin(true);
         generateMatrixGrid(5, 7);
-
         addEstimatedValuesSection();
     }
 
-    private void addEstimatedValuesSection(){
+    private void addEstimatedValuesSection() {
         String basePath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath() + "/WEB-INF/images/";
-        FileResource first = new FileResource(new File(basePath + REFERENCE_CURRENCY.getImgPath()));for (int i = 0; i <= 6; i++){
-            FileResource second = new FileResource(new File(basePath + Currency.fromValue(i).getImgPath()));this.getComponent(0, i).setIcon(first);
-            if ( i!= REFERENCE_CURRENCY.getIntValue() - 1) {calcEstimatedValue(Currency.fromValue(i), 5, i);
+        FileResource first = new FileResource(new File(basePath + REFERENCE_CURRENCY.getImgPath()));
+        for (int i = 0; i <= 6; i++) {
+            FileResource second = new FileResource(new File(basePath + Currency.fromValue(i).getImgPath()));
+            this.getComponent(0, i).setIcon(first);
+            if (i != REFERENCE_CURRENCY.getIntValue() - 1) {
+                calcEstimatedValue(Currency.fromValue(i), 5, i);
             }
-            this.getComponent(2, i)).setValue(" : ");
-            ((Label) this.getComponent(4,i).setIcon(second);
+            ((Label) this.getComponent(2, i)).setValue(" : ");
+            this.getComponent(4, i).setIcon(second);
         }
     }
 
@@ -50,7 +52,12 @@ public class EstimatedValuesUI extends GridLayout {
             for (int col = 0; col < this.getColumns(); col++) {
                 final Label child = new Label("", ContentMode.HTML);
                 this.addComponent(child);
-                this.setComponentAlignment(child, Alignment.MIDDLE_CENTER);
+                if (col == 0){
+                    this.setComponentAlignment(child, Alignment.MIDDLE_LEFT);
+                } else {
+                    this.setComponentAlignment(child, Alignment.MIDDLE_CENTER);
+
+                }
             }
         }
     }
@@ -76,19 +83,19 @@ public class EstimatedValuesUI extends GridLayout {
         return HttpRequestHandler.fetchTradesFromUrl(requestUrl, size);
     }
 
-    private void ratioFixerAndPrinter(double value, int row){
+    private void ratioFixerAndPrinter(double value, int row) {
 
 
         if (value < 1) {
-            ((Label)this.getComponent(1, row)).setValue(new BigDecimal(1 / value).setScale(3, BigDecimal.ROUND_HALF_UP).toString());
+            ((Label) this.getComponent(1, row)).setValue(new BigDecimal(1 / value).setScale(3, BigDecimal.ROUND_HALF_UP).toString());
             this.setComponentAlignment(this.getComponent(1, row), Alignment.MIDDLE_RIGHT);
-            ((Label)this.getComponent(3, row)).setValue("1");
+            ((Label) this.getComponent(3, row)).setValue("1");
             this.setComponentAlignment(this.getComponent(3, row), Alignment.MIDDLE_LEFT);
 
         } else {
-            ((Label)this.getComponent(1, row)).setValue("1");
+            ((Label) this.getComponent(1, row)).setValue("1");
             this.setComponentAlignment(this.getComponent(1, row), Alignment.MIDDLE_RIGHT);
-            ((Label)this.getComponent(3, row)).setValue(new BigDecimal(1 / value).setScale(3, BigDecimal.ROUND_HALF_UP).toString());
+            ((Label) this.getComponent(3, row)).setValue(new BigDecimal(1 / value).setScale(3, BigDecimal.ROUND_HALF_UP).toString());
             this.setComponentAlignment(this.getComponent(3, row), Alignment.MIDDLE_LEFT);
         }
     }
