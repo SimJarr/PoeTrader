@@ -1,6 +1,5 @@
 package se.simjarr.model;
 
-
 import static se.simjarr.global.GlobalVariables.REFERENCE_CURRENCY;
 
 public class TradeOffer {

@@ -1,5 +1,7 @@
 package se.simjarr.ui;
 
+import com.vaadin.server.FileResource;
+import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import se.simjarr.global.Currency;
@@ -8,6 +10,7 @@ import se.simjarr.model.HttpRequestHandler;
 import se.simjarr.model.TradeOffer;
 
 import java.math.BigDecimal;
+import java.io.File;
 import java.util.List;
 
 import static se.simjarr.global.GlobalVariables.HC_LEGACY;
@@ -27,14 +30,14 @@ public class EstimatedValuesUI extends GridLayout {
         addEstimatedValuesSection();
     }
 
-    private void addEstimatedValuesSection() {
-        for (int i = 0; i <= 6; i++) {
-            ((Label) this.getComponent(0, i)).setValue("<img style='width:30px; height:30px;'src='http://currency.poe.trade/static/currency/Chaos_Orb.png'/>");
-            if (i != REFERENCE_CURRENCY.getIntValue() - 1) {
-                calcEstimatedValue(Currency.fromValue(i), 5, i);
+    private void addEstimatedValuesSection(){
+        String basePath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath() + "/WEB-INF/images/";
+        FileResource first = new FileResource(new File(basePath + REFERENCE_CURRENCY.getImgPath()));for (int i = 0; i <= 6; i++){
+            FileResource second = new FileResource(new File(basePath + Currency.fromValue(i).getImgPath()));this.getComponent(0, i).setIcon(first);
+            if ( i!= REFERENCE_CURRENCY.getIntValue() - 1) {calcEstimatedValue(Currency.fromValue(i), 5, i);
             }
-            ((Label) this.getComponent(2, i)).setValue(" : ");
-            ((Label) this.getComponent(4, i)).setValue("<img style='width:30px; height:30px;'src='http://currency.poe.trade/static/currency/Orb_of_Alteration.png'/>");
+            this.getComponent(2, i)).setValue(" : ");
+            ((Label) this.getComponent(4,i).setIcon(second);
         }
     }
 
@@ -45,7 +48,7 @@ public class EstimatedValuesUI extends GridLayout {
 
         for (int row = 0; row < this.getRows(); row++) {
             for (int col = 0; col < this.getColumns(); col++) {
-                final Label child = new Label("N/A", ContentMode.HTML);
+                final Label child = new Label("", ContentMode.HTML);
                 this.addComponent(child);
                 this.setComponentAlignment(child, Alignment.MIDDLE_CENTER);
             }
