@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static se.simjarr.global.GlobalVariables.HC_LEGACY;
+import static se.simjarr.global.Currency.*;
 
 public class TradeFinderUI extends VerticalLayout{
 
@@ -34,10 +35,10 @@ public class TradeFinderUI extends VerticalLayout{
         HorizontalLayout formLayout = new HorizontalLayout();
 
         CheckBoxGroup<Currency> have = new CheckBoxGroup<>();
-        have.setItems(Currency.CHAOS_ORB, Currency.BLESSED_ORB);
+        have.setItems(ORB_OF_ALTERATION, ORB_OF_FUSING, ORB_OF_ALCHEMY, CHAOS_ORB);
 
         CheckBoxGroup<Currency> want = new CheckBoxGroup<>();
-        want.setItems(Currency.CHAOS_ORB, Currency.BLESSED_ORB);
+        want.setItems(ORB_OF_ALTERATION, ORB_OF_FUSING, ORB_OF_ALCHEMY, CHAOS_ORB);
 
         Button send = new Button("Send");
         send.addClickListener(clickEvent -> {
