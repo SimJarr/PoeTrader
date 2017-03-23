@@ -4,6 +4,7 @@ import com.vaadin.ui.*;
 import se.simjarr.global.Currency;
 import se.simjarr.model.CurrencyTradeUrlBuilder;
 import se.simjarr.model.HttpRequestHandler;
+import se.simjarr.model.TradeFinder;
 import se.simjarr.model.TradeOffer;
 
 import java.util.List;
@@ -45,6 +46,9 @@ public class TradeFinderUI extends VerticalLayout{
             tradeOffers.forEach(x -> responseBuilder.append(x.getUsername()).append(", "));
             //TODO this is now my testing-output
             responseText.setValue(ESTIMATED_VALUES.toString());
+            //TODO this is my TEST
+            //TradeFinder tradeFinder = new TradeFinder();
+            //tradeFinder.generateTradeChain(1);
         });
 
         formLayout.addComponents(have, want, send);

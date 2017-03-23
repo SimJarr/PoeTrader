@@ -27,7 +27,39 @@ public class TradeFinder {
         acceptableTradeCurrency.add(Currency.ORB_OF_ALCHEMY);
     }
 
-    public Map<TradeOffer, Double> findValueTrades() {
+    public Set<TradeOffer> generateTradeChain(int minProfit) {
+        Set<TradeOffer> tradeChain = new HashSet<>(); // chain of trades for maximum profit
+        Map<Currency, Integer> boughtCurrency = new HashMap<>(); // all currency gained from trading inside current tradechain
+        findValueTrades().forEach((trade,value) -> {
+            if(value >= minProfit) {
+                Currency buyCurrency = Currency.fromValue(Integer.parseInt(trade.getBuyCurrency()));
+                int buyValue = Integer.parseInt(trade.getBuyValue());
+                if(availableCurrency.get(buyCurrency) >= buyValue) { // everything ok, perform trade
+                    Currency sellCurrency = Currency.fromValue(Integer.parseInt(trade.getSellCurrency()));
+                    int sellValue = Integer.parseInt(trade.getSellValue());
+                    boughtCurrency.put(sellCurrency, sellValue);
+                    reduceCurrency(buyCurrency, buyValue);
+                }
+            }
+        });
+        System.out.println("inventory");
+        availableCurrency.forEach((k,v) -> {
+            System.out.println("currency: " + k.name() + " value: " + v);
+        });
+        System.out.println("bought currency");
+        boughtCurrency.forEach((k,v) -> {
+            System.out.println("currency: " + k.name() + " value: " + v);
+        });
+        return tradeChain;
+    }
+
+    private void reduceCurrency(Currency currency, int amount) {
+        int currentValue = availableCurrency.get(currency);
+        currentValue -= amount;
+        availableCurrency.put(currency, currentValue);
+    }
+
+    private Map<TradeOffer, Double> findValueTrades() {
         List<TradeOffer> trades = fetchTrades();
         Map<TradeOffer, Double> tradeValue = new HashMap<>();
         trades.forEach(tradeOffer -> {
