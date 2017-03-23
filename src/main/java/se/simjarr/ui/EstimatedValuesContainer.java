@@ -1,6 +1,5 @@
 package se.simjarr.ui;
 
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
 
