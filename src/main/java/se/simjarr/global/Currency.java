@@ -1,5 +1,10 @@
 package se.simjarr.global;
 
+import com.vaadin.server.FileResource;
+import com.vaadin.server.VaadinService;
+
+import java.io.File;
+
 public enum Currency {
 
     ORB_OF_ALTERATION(1, "Orb_of_Alteration.png"),
@@ -29,6 +34,12 @@ public enum Currency {
 
     public static Currency fromValue(int value) {
         return Currency.values()[value-1];
+    }
+
+    public FileResource getFileResource() {
+        String basePath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath() + "/WEB-INF/images/";
+        FileResource fileResource = new FileResource(new File(basePath + getImgPath()));
+        return fileResource;
     }
 
     public String getImgPath() {
