@@ -37,7 +37,7 @@ public class EstimatedValuesList extends GridLayout {
                 FileResource second = new FileResource(new File(basePath + Currency.fromValue(i + 1).getImgPath()));
                 this.getComponent(0, i).setIcon(first);
 
-                ((Label) this.getComponent(2, i)).setValue(" : ");
+                ((Label) this.getComponent(2, i)).setValue(" <b>:</b> ");
 
                 this.getComponent(4, i).setIcon(second);
             }
@@ -67,7 +67,7 @@ public class EstimatedValuesList extends GridLayout {
                 this.addComponent(child);
                 if (col == 0 || col == 4) {
                     this.setComponentAlignment(child, Alignment.MIDDLE_LEFT);
-                } else if (col == 1 || col == 3){
+                } else if (col == 1 || col == 3) {
                     this.getComponent(col, row).setWidth("50px");
                 } else {
                     this.setComponentAlignment(child, Alignment.MIDDLE_CENTER);
@@ -101,13 +101,19 @@ public class EstimatedValuesList extends GridLayout {
 
     private void updateRatios(List<Ratio> ratios) {
 
-        for(Ratio r : ratios){
-            if (r.isFlipped()){
-                ((Label) this.getComponent(1, r.getRow())).setValue(new BigDecimal(1 / r.getRatio()).setScale(3, BigDecimal.ROUND_HALF_UP).toString());
-                ((Label) this.getComponent(3, r.getRow())).setValue("1");
+        for (Ratio r : ratios) {
+
+            String color = "#000000";
+            if (ESTIMATED_VALUES.get(r.getCurrency()) != null && ESTIMATED_VALUES.get(r.getCurrency()) != (1 / r.getRatio())) {
+                color = "#00aa00";
+            }
+
+            if (r.isFlipped()) {
+                ((Label) this.getComponent(1, r.getRow())).setValue("<font color=" + color + "><b>" + new BigDecimal(1 / r.getRatio()).setScale(3, BigDecimal.ROUND_HALF_UP).toString() + "</b></font>");
+                ((Label) this.getComponent(3, r.getRow())).setValue("<b>1</b>");
             } else {
-                ((Label) this.getComponent(1, r.getRow())).setValue("1");
-                ((Label) this.getComponent(3, r.getRow())).setValue(new BigDecimal(r.getRatio()).setScale(3, BigDecimal.ROUND_HALF_UP).toString());
+                ((Label) this.getComponent(1, r.getRow())).setValue("<b>1</b>");
+                ((Label) this.getComponent(3, r.getRow())).setValue("<font color=" + color + "><b>" + new BigDecimal(r.getRatio()).setScale(3, BigDecimal.ROUND_HALF_UP).toString() + "</b></font>");
             }
             this.setComponentAlignment(this.getComponent(1, r.getRow()), Alignment.MIDDLE_RIGHT);
             this.setComponentAlignment(this.getComponent(3, r.getRow()), Alignment.MIDDLE_LEFT);
