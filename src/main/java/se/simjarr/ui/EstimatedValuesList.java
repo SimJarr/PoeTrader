@@ -30,11 +30,10 @@ public class EstimatedValuesList extends GridLayout {
     }
 
     private void addEstimatedValuesStructure() {
-        String basePath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath() + "/WEB-INF/images/";
-        FileResource first = new FileResource(new File(basePath + REFERENCE_CURRENCY.getImgPath()));
+        FileResource first = REFERENCE_CURRENCY.getFileResource();
         for (int i = 0; i < this.getRows(); i++) {
             if (i != REFERENCE_CURRENCY.getIntValue() - 1) {
-                FileResource second = new FileResource(new File(basePath + Currency.fromValue(i + 1).getImgPath()));
+                FileResource second = Currency.fromValue(i + 1).getFileResource();
                 this.getComponent(0, i).setIcon(first);
 
                 ((Label) this.getComponent(2, i)).setValue(" <b>:</b> ");
