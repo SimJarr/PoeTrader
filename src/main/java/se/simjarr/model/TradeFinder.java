@@ -33,7 +33,7 @@ public class TradeFinder {
         }
     }
 
-    public List<TradeOffer> tradeChainChainerOfHell(double minProfit, List<TradeOffer> tradeChain) {
+    public List<TradeOffer> tradeChainer(double minProfit, List<TradeOffer> tradeChain) {
         List<TradeOffer> tradeChainChain = new ArrayList<>();
         if(tradeChain != null) {
             tradeChainChain.addAll(tradeChain);
@@ -45,7 +45,7 @@ public class TradeFinder {
             keepChaining = tradeChainChain.size() > lengthBefore;
         }
         while(keepChaining);
-        if(tradeChainChain.size() > (tradeChain != null ? tradeChain.size() : 0)) return tradeChainChainerOfHell(minProfit, tradeChainChain);
+        if(tradeChainChain.size() > (tradeChain != null ? tradeChain.size() : 0)) return tradeChainer(minProfit, tradeChainChain);
         return tradeChainChain;
     }
 

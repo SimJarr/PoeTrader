@@ -48,7 +48,7 @@ public class TradeFinderLayout extends VerticalLayout {
             });
             TradeFinder tradeFinder = new TradeFinder();
             tradeFinder.setAvailableCurrency(myCurrency);
-            tradeFinder.tradeChainChainerOfHell(1, null);
+            tradeFinder.tradeChainer(1, null);
         });
         this.addComponents(formLayout, sendButton);
     }
