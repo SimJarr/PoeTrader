@@ -13,6 +13,7 @@ import com.vaadin.ui.VerticalLayout;
 public class ApplicationUI extends UI {
 
     private TradeFinderUI tradeFinderUI;
+    private TradeFinderLayout tradeFinderLayout;
     private EstimatedValuesContainer estimatedValuesContainer;
     private HorizontalLayout layout;
 
@@ -41,8 +42,9 @@ public class ApplicationUI extends UI {
     private void addTabs() {
         TabSheet tabSheet = new TabSheet();
         tradeFinderUI = new TradeFinderUI();
+        tradeFinderLayout = new TradeFinderLayout();
         tabSheet.addTab(tradeFinderUI, "Hot Deals");
-        tabSheet.addTab(new VerticalLayout(), "My Offers");
+        tabSheet.addTab(tradeFinderLayout, "Jarres Place");
         tabSheet.addTab(new VerticalLayout(), "Simon Knows");
 
         layout.addComponent(tabSheet);
