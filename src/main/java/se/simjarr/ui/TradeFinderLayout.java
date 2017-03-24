@@ -94,6 +94,7 @@ public class TradeFinderLayout extends VerticalLayout {
         sb.append("Username: ").append(trade.getUsername());
         sb.append("\n").append("You get: ").append(Currency.fromValue(trade.getSellCurrency()).name()).append(" x ").append(trade.getSellValue());
         sb.append("\n").append("You pay: ").append(Currency.fromValue(trade.getBuyCurrency()).name()).append(" x ").append(trade.getBuyValue());
+        sb.append("\n").append("Trade value: ").append(trade.calculateTradeValue());
         return sb.toString();
     }
 

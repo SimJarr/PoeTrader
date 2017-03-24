@@ -2,6 +2,7 @@ package se.simjarr.model;
 
 import se.simjarr.global.Currency;
 
+import static se.simjarr.global.GlobalVariables.ESTIMATED_VALUES;
 import static se.simjarr.global.GlobalVariables.REFERENCE_CURRENCY;
 
 public class TradeOffer {
@@ -56,6 +57,13 @@ public class TradeOffer {
 
     public double getReferenceRatio() {
         return referenceRatio;
+    }
+
+    public double calculateTradeValue() {
+        double sellValueAsReferenceCurrency = sellValue * ESTIMATED_VALUES.get(Currency.fromValue(sellCurrency));
+        double buyValueAsReferenceCurrency = buyValue * ESTIMATED_VALUES.get(Currency.fromValue(buyCurrency));
+
+        return sellValueAsReferenceCurrency - buyValueAsReferenceCurrency;
     }
 
     //TODO: no good, we want a real one

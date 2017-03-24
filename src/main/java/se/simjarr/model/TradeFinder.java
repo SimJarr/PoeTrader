@@ -72,24 +72,16 @@ public class TradeFinder {
     }
 
     private void updateTradeStock(TradeOffer trade) {
-        if(trade.getStock() != -1)
-            if(tradeStock.containsKey(trade)) {
+        if(trade.getStock() != -1) {
+            if(tradeStock.containsKey(trade))
                 tradeStock.put(trade, tradeStock.get(trade) - trade.getSellValue());
-                if(tradeStock.get(trade) == 0)
-                    notUsable.add(trade);
-            }
             else
-                tradeStock.put(trade, trade.getStock());
+                tradeStock.put(trade, trade.getStock() - trade.getSellValue());
+            if(tradeStock.get(trade) < trade.getSellValue())
+                notUsable.add(trade);
+        }
         else
             notUsable.add(trade);
-    }
-
-    private double calculateInventoryValue(Map<Currency, Integer> inventory) {
-        double value = 0;
-        for(Map.Entry<Currency, Integer> entry : inventory.entrySet()) {
-            value += entry.getValue() * ESTIMATED_VALUES.get(entry.getKey());
-        }
-        return value;
     }
 
     private void updateCurrency(Map<Currency, Integer> currencyMap, Currency currency, int amount) {
@@ -104,22 +96,12 @@ public class TradeFinder {
         List<TradeOffer> trades = fetchTrades();
         Map<TradeOffer, Double> tradeValue = new HashMap<>();
         trades.forEach(tradeOffer -> {
-            double value = getTradeValue(tradeOffer);
+            double value = tradeOffer.calculateTradeValue();
             if(value > 0)
                 tradeValue.put(tradeOffer, value);
         });
 
         return tradeValue;
-    }
-
-    private double getTradeValue(TradeOffer tradeOffer) {
-        double sellValue = tradeOffer.getSellValue();
-        double buyValue = tradeOffer.getBuyValue();
-
-        double sellValueAsReferenceCurrency = sellValue * ESTIMATED_VALUES.get(Currency.fromValue(tradeOffer.getSellCurrency()));
-        double buyValueAsReferenceCurrency = buyValue * ESTIMATED_VALUES.get(Currency.fromValue(tradeOffer.getBuyCurrency()));
-
-        return sellValueAsReferenceCurrency - buyValueAsReferenceCurrency;
     }
 
     private List<TradeOffer> fetchTrades() {
