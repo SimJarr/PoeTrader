@@ -61,20 +61,20 @@ public class TradeFinder {
                 if(availableCurrency.get(buyCurrency) >= buyValue && buyCurrency != sellCurrency && !notUsable.contains(trade)) {
                     System.out.println("buying : " + Currency.fromValue(trade.getSellCurrency()) + " x " + trade.getSellValue() + " for " + Currency.fromValue(trade.getBuyCurrency()) + " x " + trade.getBuyValue());
                     updateTradeStock(trade);
-                    changeCurrency(boughtCurrency, sellCurrency, sellValue);
-                    changeCurrency(availableCurrency, buyCurrency, -buyValue);
+                    updateCurrency(boughtCurrency, sellCurrency, sellValue);
+                    updateCurrency(availableCurrency, buyCurrency, -buyValue);
                     tradeChain.add(trade);
                 }
             }
         });
-        boughtCurrency.forEach((k,v) -> changeCurrency(availableCurrency, k, v));
+        boughtCurrency.forEach((k,v) -> updateCurrency(availableCurrency, k, v));
         return tradeChain;
     }
 
     private void updateTradeStock(TradeOffer trade) {
         if(trade.getStock() != -1)
             if(tradeStock.containsKey(trade)) {
-                tradeStock.put(trade, tradeStock.get(trade) - 1);
+                tradeStock.put(trade, tradeStock.get(trade) - trade.getSellValue());
                 if(tradeStock.get(trade) == 0)
                     notUsable.add(trade);
             }
@@ -92,7 +92,7 @@ public class TradeFinder {
         return value;
     }
 
-    private void changeCurrency(Map<Currency, Integer> currencyMap, Currency currency, int amount) {
+    private void updateCurrency(Map<Currency, Integer> currencyMap, Currency currency, int amount) {
         int currentValue = 0;
         if(currencyMap.containsKey(currency))
             currentValue = currencyMap.get(currency);
