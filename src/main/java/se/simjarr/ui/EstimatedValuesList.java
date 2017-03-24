@@ -99,9 +99,19 @@ public class EstimatedValuesList extends GridLayout {
 
         for (Ratio r : ratios) {
 
-            String color = "#000000";
-            if (ESTIMATED_VALUES.get(r.getCurrency()) != null && ESTIMATED_VALUES.get(r.getCurrency()) != (1 / r.getRatio())) {
-                color = "#00aa00";
+            String color = "#000000"; //black
+            if (ESTIMATED_VALUES.get(r.getCurrency()) != null && ESTIMATED_VALUES.get(r.getCurrency()) > (1 / r.getRatio())) {
+                if (r.isFlipped()){
+                    color = "#00aa00"; //green
+                } else {
+                    color = "#aa0000"; //red
+                }
+            } else if (ESTIMATED_VALUES.get(r.getCurrency()) != null && ESTIMATED_VALUES.get(r.getCurrency()) < (1 / r.getRatio())){
+                if (r.isFlipped()){
+                    color = "#aa0000"; //red
+                } else {
+                    color = "#00aa00"; //green
+                }
             }
 
             if (r.isFlipped()) {
