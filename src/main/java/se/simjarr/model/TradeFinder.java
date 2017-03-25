@@ -51,7 +51,6 @@ public class TradeFinder {
 
     private Set<TradeOffer> generateTradeChain(double minProfit) {
         Set<TradeOffer> tradeChain = new HashSet<>();
-        Map<Currency, Integer> boughtCurrency = new HashMap<>();
         findValueTrades().forEach((trade,value) -> {
             if(value >= minProfit) {
                 Currency buyCurrency = Currency.fromValue(trade.getBuyCurrency());
@@ -61,13 +60,12 @@ public class TradeFinder {
                 if(availableCurrency.get(buyCurrency) >= buyValue && buyCurrency != sellCurrency && !notUsable.contains(trade)) {
                     System.out.println("buying : " + Currency.fromValue(trade.getSellCurrency()) + " x " + trade.getSellValue() + " for " + Currency.fromValue(trade.getBuyCurrency()) + " x " + trade.getBuyValue());
                     updateTradeStock(trade);
-                    updateCurrency(boughtCurrency, sellCurrency, sellValue);
+                    updateCurrency(availableCurrency, sellCurrency, sellValue);
                     updateCurrency(availableCurrency, buyCurrency, -buyValue);
                     tradeChain.add(trade);
                 }
             }
         });
-        boughtCurrency.forEach((k,v) -> updateCurrency(availableCurrency, k, v));
         return tradeChain;
     }
 
