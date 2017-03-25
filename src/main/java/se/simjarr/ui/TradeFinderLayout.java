@@ -15,16 +15,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TradeFinderLayout extends VerticalLayout {
 
-    private Accordion tradeDisplayLayout;
+    private Panel tradeDisplayLayout;
+    private Accordion tradeDisplayList;
     private TextField minProfitInput;
     private Map<Currency, String> currencyId;
 
     public TradeFinderLayout() {
-        tradeDisplayLayout = new Accordion();
+        tradeDisplayLayout = new Panel();
+        tradeDisplayList = new Accordion();
         currencyId = new HashMap<>();
 
         addHeader();
         addCurrencySelection();
+        addTradeDisplaySection();
     }
 
     private void addHeader() {
@@ -79,8 +82,14 @@ public class TradeFinderLayout extends VerticalLayout {
         this.addComponents(formLayout, horizontalLayout);
     }
 
+    private void addTradeDisplaySection(){
+        tradeDisplayLayout.setHeight("550px");
+        tradeDisplayLayout.addStyleName("borderless");
+        this.addComponent(tradeDisplayLayout);
+    }
+
     private void addTradeChainDisplay(List<TradeOffer> trades) {
-        tradeDisplayLayout.removeAllComponents();
+        tradeDisplayList.removeAllComponents();
         AtomicInteger counter = new AtomicInteger(1);
         trades.forEach(trade -> {
             TextArea textArea = new TextArea();
@@ -88,9 +97,9 @@ public class TradeFinderLayout extends VerticalLayout {
             textArea.setWidth(100, Unit.PERCENTAGE);
             textArea.setValue(tradeToString(trade));
             FileResource icon = Currency.fromValue(trade.getSellCurrency()).getFileResource();
-            tradeDisplayLayout.addTab(textArea, "TRADE " + counter.getAndIncrement()).setIcon(icon);
+            tradeDisplayList.addTab(textArea, "TRADE " + counter.getAndIncrement()).setIcon(icon);
         });
-        this.addComponent(tradeDisplayLayout);
+        tradeDisplayLayout.setContent(tradeDisplayList);
     }
 
     private String tradeToString(TradeOffer trade) {
