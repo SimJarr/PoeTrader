@@ -84,7 +84,8 @@ public class TradeFinderLayout extends VerticalLayout {
             textArea.setEnabled(false);
             textArea.setWidth(100, Unit.PERCENTAGE);
             textArea.setValue(tradeToString(trade));
-            tradeDisplayLayout.addTab(textArea, "TRADE " + counter.getAndIncrement());
+            FileResource icon = Currency.fromValue(trade.getSellCurrency()).getFileResource();
+            tradeDisplayLayout.addTab(textArea, "TRADE " + counter.getAndIncrement()).setIcon(icon);
         });
         this.addComponent(tradeDisplayLayout);
     }
