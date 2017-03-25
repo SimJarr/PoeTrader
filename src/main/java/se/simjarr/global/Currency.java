@@ -38,8 +38,7 @@ public enum Currency {
 
     public FileResource getFileResource() {
         String basePath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath() + "/WEB-INF/images/";
-        FileResource fileResource = new FileResource(new File(basePath + getImgPath()));
-        return fileResource;
+        return new FileResource(new File(basePath + getImgPath()));
     }
 
     public String getImgPath() {
