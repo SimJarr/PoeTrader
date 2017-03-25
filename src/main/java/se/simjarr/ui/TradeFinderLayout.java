@@ -96,8 +96,14 @@ public class TradeFinderLayout extends VerticalLayout {
             textArea.setEnabled(false);
             textArea.setWidth(100, Unit.PERCENTAGE);
             textArea.setValue(tradeToString(trade));
-            FileResource icon = Currency.fromValue(trade.getSellCurrency()).getFileResource();
-            tradeDisplayList.addTab(textArea, "TRADE " + counter.getAndIncrement()).setIcon(icon);
+            String imgTagStart = "<img class=\"v-icon\" src=\"";
+            String imgTagEnd = "\">";
+            String baseImgPath = "VAADIN/themes/valo/images/";
+            String sellPicture = imgTagStart + baseImgPath + Currency.fromValue(trade.getSellCurrency()).getImgPath() + imgTagEnd;
+            String buyPicture = imgTagStart + baseImgPath + Currency.fromValue(trade.getBuyCurrency()).getImgPath() + imgTagEnd;
+            tradeDisplayList.setTabCaptionsAsHtml(true);
+            tradeDisplayList.addTab(textArea, "TRADE " + counter.getAndIncrement() + ": " + sellPicture + "<b> " + trade.getSellValue() + " ⇐ " + trade.getBuyValue() + " </b>" + buyPicture);
+
         });
         if (trades.size() > 0)
             tradeDisplayLayout.setContent(tradeDisplayList);
