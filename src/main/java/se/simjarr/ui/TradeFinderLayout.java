@@ -18,12 +18,10 @@ public class TradeFinderLayout extends VerticalLayout {
     private Accordion tradeDisplayLayout;
     private TextField minProfitInput;
     private Map<Currency, String> currencyId;
-    private double minProfitPerTrade;
 
     public TradeFinderLayout() {
         tradeDisplayLayout = new Accordion();
         currencyId = new HashMap<>();
-        minProfitPerTrade = 0.1;
 
         addHeader();
         addCurrencySelection();
@@ -68,7 +66,12 @@ public class TradeFinderLayout extends VerticalLayout {
             });
             TradeFinder tradeFinder = new TradeFinder();
             tradeFinder.setAvailableCurrency(myCurrency);
-            minProfitPerTrade = Double.parseDouble(minProfitInput.getValue());
+            double minProfitPerTrade;
+            try {
+                minProfitPerTrade = Double.parseDouble(minProfitInput.getValue());
+            } catch (NumberFormatException e) {
+                minProfitPerTrade = 0.1;
+            }
             addTradeChainDisplay(tradeFinder.tradeChainer(minProfitPerTrade, null));
         });
 
