@@ -37,8 +37,8 @@ public class TradeFinderLayout extends VerticalLayout {
 
     private void addCurrencySelection() {
         HorizontalLayout formLayout = new HorizontalLayout();
-        for(int i = 0; i < Currency.values().length; i++) {
-            Currency current = Currency.fromValue(i+1);
+        for (int i = 0; i < Currency.values().length; i++) {
+            Currency current = Currency.fromValue(i + 1);
             FileResource icon = current.getFileResource();
             Slider slider = new Slider();
             slider.setOrientation(SliderOrientation.VERTICAL);
@@ -63,7 +63,7 @@ public class TradeFinderLayout extends VerticalLayout {
         Button sendButton = new Button("Send");
         sendButton.addClickListener(clickEvent -> {
             Map<Currency, Integer> myCurrency = new HashMap<>();
-            currencyId.forEach((k,v) -> {
+            currencyId.forEach((k, v) -> {
                 int sliderValue = ((Slider) findComponentById(this, v)).getValue().intValue();
                 myCurrency.put(k, sliderValue);
             });
@@ -82,7 +82,7 @@ public class TradeFinderLayout extends VerticalLayout {
         this.addComponents(formLayout, horizontalLayout);
     }
 
-    private void addTradeDisplaySection(){
+    private void addTradeDisplaySection() {
         tradeDisplayLayout.setHeight("550px");
         tradeDisplayLayout.addStyleName("borderless");
         this.addComponent(tradeDisplayLayout);
@@ -99,7 +99,10 @@ public class TradeFinderLayout extends VerticalLayout {
             FileResource icon = Currency.fromValue(trade.getSellCurrency()).getFileResource();
             tradeDisplayList.addTab(textArea, "TRADE " + counter.getAndIncrement()).setIcon(icon);
         });
-        tradeDisplayLayout.setContent(tradeDisplayList);
+        if (trades.size() > 0)
+            tradeDisplayLayout.setContent(tradeDisplayList);
+        else if (tradeDisplayLayout.getContent() != null)
+            tradeDisplayLayout.setContent(new Label(""));
     }
 
     private String tradeToString(TradeOffer trade) {
