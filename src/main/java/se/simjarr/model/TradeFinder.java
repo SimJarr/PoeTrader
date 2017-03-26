@@ -28,84 +28,125 @@ public class TradeFinder {
     }
 
     private void insertTestValues() {
-        for(int i = 0; i < Currency.values().length; i ++) {
+        for (int i = 0; i < Currency.values().length; i++) {
             acceptableTradeCurrency.add(Currency.values()[i]);
         }
     }
 
-    public List<TradeOffer> tradeChainer(double minProfit, List<TradeOffer> tradeChain) {
+    public List<TradeOffer> tradeChainer(double minProfit, List<TradeOffer> tradeChain, boolean advancedSearch) {
         List<TradeOffer> tradeChainChain = new ArrayList<>();
-        if(tradeChain != null) {
+        if (tradeChain != null) {
             tradeChainChain.addAll(tradeChain);
         }
         boolean keepChaining;
         do {
             int lengthBefore = tradeChainChain.size();
-            tradeChainChain.addAll(generateTradeChain(minProfit));
+            tradeChainChain.addAll(generateTradeChain(minProfit, advancedSearch));
             keepChaining = tradeChainChain.size() > lengthBefore;
         }
-        while(keepChaining);
-        if(tradeChainChain.size() > (tradeChain != null ? tradeChain.size() : 0)) return tradeChainer(minProfit, tradeChainChain);
+        while (keepChaining);
+        if (tradeChainChain.size() > (tradeChain != null ? tradeChain.size() : 0))
+            return tradeChainer(minProfit, tradeChainChain, advancedSearch);
         return tradeChainChain;
     }
 
-    private Set<TradeOffer> generateTradeChain(double minProfit) {
+    private Set<TradeOffer> generateTradeChain(double minProfit, boolean advancedSearch) {
         Set<TradeOffer> tradeChain = new HashSet<>();
-        findValueTrades().forEach((trade,value) -> {
-            if(value >= minProfit) {
+        findValueTrades().forEach((trade, value) -> {
+            if (value >= minProfit) {
                 Currency buyCurrency = Currency.fromValue(trade.getBuyCurrency());
                 int buyValue = trade.getBuyValue();
                 Currency sellCurrency = Currency.fromValue(trade.getSellCurrency());
-                int sellValue = trade.getSellValue();
-                if(availableCurrency.get(buyCurrency) >= buyValue && buyCurrency != sellCurrency && !notUsable.contains(trade)) {
-                    System.out.println("buying : " + Currency.fromValue(trade.getSellCurrency()) + " x " + trade.getSellValue() + " for " + Currency.fromValue(trade.getBuyCurrency()) + " x " + trade.getBuyValue());
-                    updateTradeStock(trade);
-                    updateCurrency(availableCurrency, sellCurrency, sellValue);
-                    updateCurrency(availableCurrency, buyCurrency, -buyValue);
+                if (availableCurrency.get(buyCurrency) >= buyValue && buyCurrency != sellCurrency && !notUsable.contains(trade)) {
+                    performTrade(trade);
                     tradeChain.add(trade);
+                } else if (advancedSearch && value > minProfit * 2 && !notUsable.contains(trade)) {
+                    List<TradeOffer> highValueTradeChain = highValueTradeChain(trade, minProfit);
+                    if(highValueTradeChain != null) {
+                        highValueTradeChain.forEach(this::performTrade);
+                        tradeChain.addAll(highValueTradeChain);
+                    }
                 }
             }
         });
         return tradeChain;
     }
 
+    private List<TradeOffer> highValueTradeChain(TradeOffer highValueTrade, double minProfit) {
+        List<TradeOffer> tradeChain = new ArrayList<>();
+
+        Currency requiredCurrency = Currency.fromValue(highValueTrade.getBuyCurrency());
+        int requiredAmount = highValueTrade.getBuyValue();
+
+        List<TradeOffer> potentialTrades = fetchTrades(availableCurrency.keySet(), new HashSet<>(Collections.singletonList(requiredCurrency)));
+        potentialTrades.sort(TradeOffer.sortByValue);
+
+        for(TradeOffer trade : potentialTrades) {
+            int stock = (trade.getStock() == -1) ? trade.getSellValue() : trade.getStock();
+            int howManyTimes = requiredAmount / trade.getSellValue();
+            if (stock > requiredAmount) {
+                double totalValuePerTrade = highValueTrade.calculateTradeValue() + (howManyTimes * trade.calculateTradeValue());
+                double totalMinProfitPerTrade = minProfit * (howManyTimes+1);
+                if (totalValuePerTrade > totalMinProfitPerTrade && availableCurrency.get(requiredCurrency) > requiredAmount) {
+                    for (int i = 0; i < howManyTimes; i++) {
+                        tradeChain.add(trade);
+                    }
+                    tradeChain.add(highValueTrade);
+                    return tradeChain;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void performTrade(TradeOffer trade) {
+        System.out.println("buying : " + Currency.fromValue(trade.getSellCurrency()) + " x " + trade.getSellValue() + " for " + Currency.fromValue(trade.getBuyCurrency()) + " x " + trade.getBuyValue());
+        updateTradeStock(trade);
+        Currency sellCurrency = Currency.fromValue(trade.getSellCurrency());
+        Currency buyCurrency = Currency.fromValue(trade.getBuyCurrency());
+        updateCurrency(availableCurrency, sellCurrency, trade.getSellValue());
+        updateCurrency(availableCurrency, buyCurrency, -trade.getBuyValue());
+    }
+
     private void updateTradeStock(TradeOffer trade) {
-        if(trade.getStock() != -1) {
-            if(tradeStock.containsKey(trade))
+        if (trade.getStock() != -1) {
+            if (tradeStock.containsKey(trade))
                 tradeStock.put(trade, tradeStock.get(trade) - trade.getSellValue());
             else
                 tradeStock.put(trade, trade.getStock() - trade.getSellValue());
-            if(tradeStock.get(trade) < trade.getSellValue())
+            if (tradeStock.get(trade) < trade.getSellValue())
                 notUsable.add(trade);
-        }
-        else
+        } else
             notUsable.add(trade);
     }
 
     private void updateCurrency(Map<Currency, Integer> currencyMap, Currency currency, int amount) {
         int currentValue = 0;
-        if(currencyMap.containsKey(currency))
+        if (currencyMap.containsKey(currency))
             currentValue = currencyMap.get(currency);
         int newValue = currentValue + amount;
-        currencyMap.put(currency, newValue);
+        if (newValue == 0)
+            currencyMap.remove(currency);
+        else
+            currencyMap.put(currency, newValue);
     }
 
     private Map<TradeOffer, Double> findValueTrades() {
-        List<TradeOffer> trades = fetchTrades();
+        List<TradeOffer> trades = fetchTrades(availableCurrency.keySet(), acceptableTradeCurrency);
         Map<TradeOffer, Double> tradeValue = new HashMap<>();
         trades.forEach(tradeOffer -> {
             double value = tradeOffer.calculateTradeValue();
-            if(value > 0)
+            if (value > 0)
                 tradeValue.put(tradeOffer, value);
         });
 
         return tradeValue;
     }
 
-    private List<TradeOffer> fetchTrades() {
+    private List<TradeOffer> fetchTrades(Set<Currency> have, Set<Currency> want) {
         CurrencyTradeUrlBuilder urlBuilder = new CurrencyTradeUrlBuilder(HC_LEGACY, true);
-        urlBuilder.setHave(availableCurrency.keySet().toArray(new Currency[availableCurrency.size()]));
-        urlBuilder.setWant(acceptableTradeCurrency.toArray(new Currency[acceptableTradeCurrency.size()]));
+        urlBuilder.setHave(have.toArray(new Currency[have.size()]));
+        urlBuilder.setWant(want.toArray(new Currency[want.size()]));
         return HttpRequestHandler.fetchTradesFromUrl(urlBuilder.build());
     }
 }
