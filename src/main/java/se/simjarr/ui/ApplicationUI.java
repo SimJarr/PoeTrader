@@ -43,9 +43,9 @@ public class ApplicationUI extends UI {
         TabSheet tabSheet = new TabSheet();
         tradeFinderUI = new TradeFinderUI();
         tradeFinderLayout = new TradeFinderLayout();
-        tabSheet.addTab(tradeFinderUI, "Hot Deals");
-        tabSheet.addTab(tradeFinderLayout, "Jarres Place");
-        tabSheet.addTab(new VerticalLayout(), "Simon Knows");
+        tabSheet.addTab(tradeFinderUI, "Test Panel");
+        tabSheet.addTab(tradeFinderLayout, "Find Trades");
+        tabSheet.addTab(new VerticalLayout(), "Work in Progress");
 
         layout.addComponent(tabSheet);
         layout.setExpandRatio(tabSheet, 4);
