@@ -59,6 +59,7 @@ public class TradeFinderLayout extends VerticalLayout {
         minProfitInput = new TextField();
         minProfitInput.setWidth(50, Unit.PIXELS);
         minProfitInput.setDescription("default value 0.1");
+        CheckBox advancedSearch = new CheckBox("enable advanced search");
 
         Button sendButton = new Button("Send");
         sendButton.addClickListener(clickEvent -> {
@@ -75,10 +76,11 @@ public class TradeFinderLayout extends VerticalLayout {
             } catch (NumberFormatException e) {
                 minProfitPerTrade = 0.1;
             }
-            addTradeChainDisplay(tradeFinder.tradeChainer(minProfitPerTrade, null));
+            boolean advanced = advancedSearch.getValue();
+            addTradeChainDisplay(tradeFinder.tradeChainer(minProfitPerTrade, null, advanced));
         });
 
-        horizontalLayout.addComponents(label, minProfitInput, sendButton);
+        horizontalLayout.addComponents(label, minProfitInput, sendButton, advancedSearch);
         this.addComponents(formLayout, horizontalLayout);
     }
 
