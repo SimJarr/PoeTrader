@@ -2,10 +2,20 @@ package se.simjarr.model;
 
 import se.simjarr.global.Currency;
 
+import java.util.Comparator;
+
 import static se.simjarr.global.GlobalVariables.ESTIMATED_VALUES;
 import static se.simjarr.global.GlobalVariables.REFERENCE_CURRENCY;
 
 public class TradeOffer {
+
+    public static Comparator<TradeOffer> sortByValue = new Comparator<TradeOffer>() {
+        @Override
+        public int compare(TradeOffer o1, TradeOffer o2) {
+            if(o1.calculateTradeValue() == o2.calculateTradeValue()) return 0;
+            return (o1.calculateTradeValue() > o2.calculateTradeValue()) ? 1 : -1;
+        }
+    };
 
     private String username;
     private int sellCurrency;
