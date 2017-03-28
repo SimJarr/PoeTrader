@@ -81,6 +81,7 @@ public class TradeFinderLayout extends VerticalLayout {
         });
 
         horizontalLayout.addComponents(label, minProfitInput, sendButton, advancedSearch);
+        horizontalLayout.setComponentAlignment(label, Alignment.MIDDLE_CENTER);
         this.addComponents(formLayout, horizontalLayout);
     }
 
