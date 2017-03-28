@@ -34,7 +34,7 @@ public abstract class TradeBank {
         return (sampleSize == null) ? trades : (sampleSize < trades.size()) ? trades.subList(0, sampleSize) : trades;
     }
 
-    public static List<TradeOffer> refreshTrades(String league, boolean online) {
+    public static void refreshTrades(String league, boolean online) {
         Currency[] arr = new Currency[Currency.values().length];
         int counter = 0;
         for(Currency c : Currency.values()) {
@@ -43,6 +43,6 @@ public abstract class TradeBank {
         }
         CurrencyTradeUrlBuilder urlBuilder = new CurrencyTradeUrlBuilder(league, online);
         String requestUrl = urlBuilder.setHave(arr).setWant(arr).build();
-        return HttpRequestHandler.fetchTradesFromUrl(requestUrl);
+        allTrades = HttpRequestHandler.fetchTradesFromUrl(requestUrl);
     }
 }
