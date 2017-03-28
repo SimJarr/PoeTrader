@@ -13,7 +13,7 @@ public abstract class HttpRequestHandler {
     public static List<TradeOffer> fetchTradesFromUrl(String requestUrl) {
         List<TradeOffer> tradeOffers = new ArrayList<>();
         try {
-            Document doc = Jsoup.connect(requestUrl).get();
+            Document doc = Jsoup.connect(requestUrl).maxBodySize(0).get();
             Elements trades = doc.select(".displayoffer");
             trades.forEach(tradeOffer -> {
                 if (validateValue(tradeOffer.attr("data-buyvalue")) && validateValue(tradeOffer.attr("data-sellvalue"))) {
