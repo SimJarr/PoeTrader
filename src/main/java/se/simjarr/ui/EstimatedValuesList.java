@@ -1,17 +1,12 @@
 package se.simjarr.ui;
 
 import com.vaadin.server.FileResource;
-import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import se.simjarr.global.Currency;
-import se.simjarr.model.CurrencyTradeUrlBuilder;
-import se.simjarr.model.HttpRequestHandler;
-import se.simjarr.model.Ratio;
-import se.simjarr.model.TradeOffer;
+import se.simjarr.model.*;
 
 import java.math.BigDecimal;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,10 +40,11 @@ public class EstimatedValuesList extends GridLayout {
 
     void fetchRatios() {
         List<Ratio> ratios = new ArrayList<>();
+        TradeBank.refreshTrades(HC_LEGACY, true);
 
         for (int i = 0; i < this.getRows(); i++) {
             if (i != REFERENCE_CURRENCY.getIntValue() - 1) {
-                ratios.add(calcEstimatedValue(Currency.fromValue(i + 1), 5, i));
+                ratios.add(createRatio(Currency.fromValue(i + 1), 5, i));
             }
         }
         updateRatios(ratios);
@@ -73,26 +69,11 @@ public class EstimatedValuesList extends GridLayout {
         }
     }
 
-    //TODO: fetch estimated value for currency compared to selected reference_currency
-    private Ratio calcEstimatedValue(Currency currency, int sampleSize, int row) {
-        List<TradeOffer> trades = fetchTrades(REFERENCE_CURRENCY, currency, sampleSize);
-        trades.addAll(fetchTrades(currency, REFERENCE_CURRENCY, sampleSize));
+    private Ratio createRatio(Currency currency, int sampleSize, int row) {
+        double estimatedValue = TradeBank.estimateValue(currency, sampleSize);
 
-        double estimatedValue = 0;
-        for (TradeOffer tradeOffer : trades) {
-            estimatedValue += tradeOffer.getReferenceRatio();
-        }
-
-        estimatedValue /= trades.size();
         if (estimatedValue < 1) return new Ratio(currency, estimatedValue, true, row);
         else return new Ratio(currency, estimatedValue, false, row);
-    }
-
-    private List<TradeOffer> fetchTrades(Currency fromCurrency, Currency toCurrency, int size) {
-        CurrencyTradeUrlBuilder urlBuilder = new CurrencyTradeUrlBuilder(HC_LEGACY, true);
-        String requestUrl = urlBuilder.setHave(fromCurrency).setWant(toCurrency).build();
-
-        return HttpRequestHandler.fetchTradesFromUrl(requestUrl, size);
     }
 
     private void updateRatios(List<Ratio> ratios) {
