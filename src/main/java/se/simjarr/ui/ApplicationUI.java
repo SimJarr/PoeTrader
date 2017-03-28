@@ -3,15 +3,13 @@ package se.simjarr.ui;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 
 @SpringUI
 @Theme("valo")
 public class ApplicationUI extends UI {
 
+    private TestLayout testLayout;
     private TradeFinderUI tradeFinderUI;
     private TradeFinderLayout tradeFinderLayout;
     private EstimatedValuesContainer estimatedValuesContainer;
@@ -43,9 +41,10 @@ public class ApplicationUI extends UI {
         TabSheet tabSheet = new TabSheet();
         tradeFinderUI = new TradeFinderUI();
         tradeFinderLayout = new TradeFinderLayout();
+        testLayout = new TestLayout();
         tabSheet.addTab(tradeFinderUI, "Test Panel");
         tabSheet.addTab(tradeFinderLayout, "Find Trades");
-        tabSheet.addTab(new VerticalLayout(), "Work in Progress");
+        tabSheet.addTab(testLayout, "Work in Progress");
 
         layout.addComponent(tabSheet);
         layout.setExpandRatio(tabSheet, 4);
