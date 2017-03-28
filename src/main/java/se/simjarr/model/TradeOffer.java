@@ -9,12 +9,9 @@ import static se.simjarr.global.GlobalVariables.REFERENCE_CURRENCY;
 
 public class TradeOffer {
 
-    public static Comparator<TradeOffer> sortByValue = new Comparator<TradeOffer>() {
-        @Override
-        public int compare(TradeOffer o1, TradeOffer o2) {
-            if(o1.calculateTradeValue() == o2.calculateTradeValue()) return 0;
-            return (o1.calculateTradeValue() > o2.calculateTradeValue()) ? 1 : -1;
-        }
+    public static Comparator<TradeOffer> sortByValue = (o1, o2) -> {
+        if(o1.calculateTradeValue() == o2.calculateTradeValue()) return 0;
+        return (o1.calculateTradeValue() > o2.calculateTradeValue()) ? 1 : -1;
     };
 
     private String username;
