@@ -3,6 +3,7 @@ package se.simjarr.model;
 import se.simjarr.global.Currency;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static se.simjarr.global.GlobalVariables.REFERENCE_CURRENCY;
@@ -32,6 +33,12 @@ public abstract class TradeBank {
         if(sellCurrency != null) trades.removeIf(trade -> !(Currency.fromValue(trade.getSellCurrency()) == sellCurrency));
         if(minValue != null) trades.removeIf(trade -> trade.calculateTradeValue() < minValue);
         return (sampleSize == null) ? trades : (sampleSize < trades.size()) ? trades.subList(0, sampleSize) : trades;
+    }
+
+    public static List<TradeOffer> selectTrades(Collection<Currency> availableCurrencies, Double minValue){
+        List<TradeOffer> result = new ArrayList<>();
+        availableCurrencies.forEach(currency -> result.addAll(selectTrades(currency, null, minValue, null)));
+        return result;
     }
 
     public static void refreshTrades(String league, boolean online) {
