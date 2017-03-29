@@ -1,6 +1,8 @@
 package se.simjarr.ui;
 
+import com.vaadin.event.LayoutEvents;
 import com.vaadin.server.FileResource;
+import com.vaadin.shared.Registration;
 import com.vaadin.shared.ui.slider.SliderOrientation;
 import com.vaadin.ui.*;
 import se.simjarr.global.Currency;
@@ -16,6 +18,7 @@ public class TradeFinderLayout extends VerticalLayout {
     private Accordion tradeDisplayList;
     private TextField minProfitInput;
     private Map<Currency, String> currencyId;
+    private Registration textAreaListener;
 
     public TradeFinderLayout() {
         tradeDisplayLayout = new Panel();
@@ -61,7 +64,7 @@ public class TradeFinderLayout extends VerticalLayout {
         sendButton.addClickListener(clickEvent -> {
             Map<Currency, Integer> myCurrency = new HashMap<>();
             currencyId.forEach((k, v) -> {
-                Slider slider = (Slider)findComponentById(this, v);
+                Slider slider = (Slider) findComponentById(this, v);
                 assert slider != null;
                 int sliderValue = slider.getValue().intValue();
                 myCurrency.put(k, sliderValue);
@@ -93,6 +96,8 @@ public class TradeFinderLayout extends VerticalLayout {
 
     private void addTradeChainDisplay(List<TradeOffer> trades) {
         tradeDisplayList.removeAllComponents();
+        if (textAreaListener != null) textAreaListener.remove();
+
         AtomicInteger counter = new AtomicInteger(1);
         trades.forEach(trade -> {
             TextArea textArea = new TextArea();
@@ -106,8 +111,29 @@ public class TradeFinderLayout extends VerticalLayout {
             String buyPicture = imgTagStart + baseImgPath + Currency.fromValue(trade.getBuyCurrency()).getImgPath() + imgTagEnd;
             tradeDisplayList.setTabCaptionsAsHtml(true);
             tradeDisplayList.addTab(textArea, "TRADE " + counter.getAndIncrement() + ": " + sellPicture + "<b> " + trade.getSellValue() + " ⇐ " + trade.getBuyValue() + " </b>" + buyPicture);
-
         });
+
+        textAreaListener = this.addLayoutClickListener((LayoutEvents.LayoutClickListener) layoutClickEvent -> {
+            if (layoutClickEvent.getClickedComponent() instanceof TextArea){
+                TextArea windowText = new TextArea("open mid");
+                TextArea clickedComponent = (TextArea) layoutClickEvent.getClickedComponent();
+                windowText.setSizeFull();
+                windowText.setValue(clickedComponent.getValue());
+
+                VerticalLayout windowContent = new VerticalLayout();
+                windowContent.setWidth("700px");
+                windowContent.setHeight("300px");
+                windowContent.addComponent(windowText);
+
+                Window window = new Window();
+                window.setContent(windowContent);
+                window.setModal(true);
+                window.setResizable(false);
+                window.center();
+                this.getUI().addWindow(window);
+            }
+        });
+
         if (trades.size() > 0)
             tradeDisplayLayout.setContent(tradeDisplayList);
         else if (tradeDisplayLayout.getContent() != null)
