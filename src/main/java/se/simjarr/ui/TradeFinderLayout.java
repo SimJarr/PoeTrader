@@ -132,7 +132,9 @@ public class TradeFinderLayout extends VerticalLayout {
                 window.setContent(windowContent);
                 window.setModal(true);
                 window.setResizable(false);
+                window.setClosable(false);
                 window.center();
+                window.addBlurListener(blurEvent -> window.close());
                 this.getUI().addWindow(window);
             }
         });
