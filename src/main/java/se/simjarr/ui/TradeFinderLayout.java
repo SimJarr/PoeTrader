@@ -132,6 +132,12 @@ public class TradeFinderLayout extends VerticalLayout {
                 windowContent.setWidth("800px");
                 windowContent.setHeight("86px");
                 windowContent.addComponent(windowText);
+                windowContent.addLayoutClickListener((LayoutEvents.LayoutClickListener) clickEvent -> {
+                    if (clickEvent.getClickedComponent() instanceof TextArea) {
+                        TextArea textArea = (TextArea) clickEvent.getClickedComponent();
+                        textArea.setSelection(0, textArea.getValue().length());
+                    }
+                });
 
                 window.setContent(windowContent);
                 window.setModal(true);
@@ -139,7 +145,6 @@ public class TradeFinderLayout extends VerticalLayout {
                 window.setClosable(false);
                 window.center();
                 this.getUI().addWindow(window);
-
             }
         });
 
