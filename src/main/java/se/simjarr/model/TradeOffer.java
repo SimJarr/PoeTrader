@@ -66,6 +66,14 @@ public class TradeOffer {
         return referenceRatio;
     }
 
+    @Override
+    public String toString() {
+        return "Username: " + getUsername() +
+                "\n" + "You get: " + Currency.fromValue(getSellCurrency()).name() + " x " + getSellValue() +
+                "\n" + "You pay: " + Currency.fromValue(getBuyCurrency()).name() + " x " + getBuyValue() +
+                "\n" + "Trade value: " + calculateTradeValue();
+    }
+
     public double calculateTradeValue() {
         double sellValueAsReferenceCurrency = sellValue * ESTIMATED_VALUES.get(Currency.fromValue(sellCurrency));
         double buyValueAsReferenceCurrency = buyValue * ESTIMATED_VALUES.get(Currency.fromValue(buyCurrency));

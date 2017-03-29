@@ -98,7 +98,7 @@ public class TradeFinderLayout extends VerticalLayout {
             TextArea textArea = new TextArea();
             textArea.setEnabled(false);
             textArea.setWidth(100, Unit.PERCENTAGE);
-            textArea.setValue(tradeToString(trade));
+            textArea.setValue(trade.toString());
             String imgTagStart = "<img class=\"v-icon\" src=\"";
             String imgTagEnd = "\">";
             String baseImgPath = "VAADIN/themes/valo/images/";
@@ -112,15 +112,6 @@ public class TradeFinderLayout extends VerticalLayout {
             tradeDisplayLayout.setContent(tradeDisplayList);
         else if (tradeDisplayLayout.getContent() != null)
             tradeDisplayLayout.setContent(new Label(""));
-    }
-
-    private String tradeToString(TradeOffer trade) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Username: ").append(trade.getUsername());
-        sb.append("\n").append("You get: ").append(Currency.fromValue(trade.getSellCurrency()).name()).append(" x ").append(trade.getSellValue());
-        sb.append("\n").append("You pay: ").append(Currency.fromValue(trade.getBuyCurrency()).name()).append(" x ").append(trade.getBuyValue());
-        sb.append("\n").append("Trade value: ").append(trade.calculateTradeValue());
-        return sb.toString();
     }
 
     private static Component findComponentById(HasComponents root, String id) {
