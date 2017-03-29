@@ -104,6 +104,7 @@ public class TradeFinderLayout extends VerticalLayout {
             textArea.setEnabled(false);
             textArea.setWidth(100, Unit.PERCENTAGE);
             textArea.setValue(trade.toString());
+            textArea.setId(String.valueOf(trades.indexOf(trade)));
             String imgTagStart = "<img class=\"v-icon\" src=\"";
             String imgTagEnd = "\">";
             String baseImgPath = "VAADIN/themes/valo/images/";
@@ -117,12 +118,14 @@ public class TradeFinderLayout extends VerticalLayout {
             if (layoutClickEvent.getClickedComponent() instanceof TextArea){
                 TextArea windowText = new TextArea("open mid");
                 TextArea clickedComponent = (TextArea) layoutClickEvent.getClickedComponent();
+                TradeOffer currentTrade = trades.get(Integer.parseInt(clickedComponent.getId()));
                 windowText.setSizeFull();
-                windowText.setValue(clickedComponent.getValue());
+                windowText.setValue(currentTrade.getBuyInGameMessage());
+                windowText.setReadOnly(true);
 
                 VerticalLayout windowContent = new VerticalLayout();
                 windowContent.setWidth("700px");
-                windowContent.setHeight("300px");
+                windowContent.setHeight("100px");
                 windowContent.addComponent(windowText);
 
                 Window window = new Window();
