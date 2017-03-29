@@ -124,8 +124,8 @@ public class TradeFinderLayout extends VerticalLayout {
                 windowText.setReadOnly(true);
 
                 VerticalLayout windowContent = new VerticalLayout();
-                windowContent.setWidth("700px");
-                windowContent.setHeight("100px");
+                windowContent.setWidth("800px");
+                windowContent.setHeight("86px");
                 windowContent.addComponent(windowText);
 
                 Window window = new Window();
