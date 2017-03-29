@@ -4,7 +4,6 @@ import com.vaadin.ui.*;
 import se.simjarr.global.Currency;
 import se.simjarr.model.CurrencyTradeUrlBuilder;
 import se.simjarr.model.HttpRequestHandler;
-import se.simjarr.model.TradeFinder;
 import se.simjarr.model.TradeOffer;
 
 import java.util.List;
@@ -13,12 +12,12 @@ import static se.simjarr.global.GlobalVariables.ESTIMATED_VALUES;
 import static se.simjarr.global.GlobalVariables.HC_LEGACY;
 import static se.simjarr.global.Currency.*;
 
-public class TradeFinderUI extends VerticalLayout{
+public class TestPanelLayout extends VerticalLayout{
 
     private TextArea responseText;
     private String url;
 
-    public TradeFinderUI() {
+    public TestPanelLayout() {
         addHeader();
         addCurrencySelection();
         addResponseText();

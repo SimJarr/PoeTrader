@@ -10,7 +10,7 @@ import com.vaadin.ui.*;
 public class ApplicationUI extends UI {
 
     private TestLayout testLayout;
-    private TradeFinderUI tradeFinderUI;
+    private TestPanelLayout testPanelLayout;
     private TradeFinderLayout tradeFinderLayout;
     private EstimatedValuesContainer estimatedValuesContainer;
     private HorizontalLayout layout;
@@ -39,10 +39,10 @@ public class ApplicationUI extends UI {
 
     private void addTabs() {
         TabSheet tabSheet = new TabSheet();
-        tradeFinderUI = new TradeFinderUI();
+        testPanelLayout = new TestPanelLayout();
         tradeFinderLayout = new TradeFinderLayout();
         testLayout = new TestLayout();
-        tabSheet.addTab(tradeFinderUI, "Test Panel");
+        tabSheet.addTab(testPanelLayout, "Test Panel");
         tabSheet.addTab(tradeFinderLayout, "Find Trades");
         tabSheet.addTab(testLayout, "Work in Progress");
 
