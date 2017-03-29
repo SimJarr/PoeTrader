@@ -7,10 +7,7 @@ import se.simjarr.global.Currency;
 import se.simjarr.model.TradeFinder;
 import se.simjarr.model.TradeOffer;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TradeFinderLayout extends VerticalLayout {
@@ -59,13 +56,14 @@ public class TradeFinderLayout extends VerticalLayout {
         minProfitInput = new TextField();
         minProfitInput.setWidth(50, Unit.PIXELS);
         minProfitInput.setDescription("default value 0.1");
-        CheckBox advancedSearch = new CheckBox("enable advanced search");
 
         Button sendButton = new Button("Send");
         sendButton.addClickListener(clickEvent -> {
             Map<Currency, Integer> myCurrency = new HashMap<>();
             currencyId.forEach((k, v) -> {
-                int sliderValue = ((Slider) findComponentById(this, v)).getValue().intValue();
+                Slider slider = (Slider)findComponentById(this, v);
+                assert slider != null;
+                int sliderValue = slider.getValue().intValue();
                 myCurrency.put(k, sliderValue);
             });
             TradeFinder tradeFinder = new TradeFinder();
@@ -76,11 +74,13 @@ public class TradeFinderLayout extends VerticalLayout {
             } catch (NumberFormatException e) {
                 minProfitPerTrade = 0.1;
             }
-            boolean advanced = advancedSearch.getValue();
-            addTradeChainDisplay(tradeFinder.tradeChainer(minProfitPerTrade, null, advanced));
+            List<List<TradeOffer>> listList = tradeFinder.tradeChainer(minProfitPerTrade);
+            List<TradeOffer> list = new ArrayList<>();
+            listList.forEach(list::addAll);
+            addTradeChainDisplay(list);
         });
 
-        horizontalLayout.addComponents(label, minProfitInput, sendButton, advancedSearch);
+        horizontalLayout.addComponents(label, minProfitInput, sendButton);
         horizontalLayout.setComponentAlignment(label, Alignment.MIDDLE_CENTER);
         this.addComponents(formLayout, horizontalLayout);
     }
