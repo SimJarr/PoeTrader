@@ -116,26 +116,30 @@ public class TradeFinderLayout extends VerticalLayout {
 
         textAreaListener = this.addLayoutClickListener((LayoutEvents.LayoutClickListener) layoutClickEvent -> {
             if (layoutClickEvent.getClickedComponent() instanceof TextArea){
-                TextArea windowText = new TextArea("open mid");
                 TextArea clickedComponent = (TextArea) layoutClickEvent.getClickedComponent();
                 TradeOffer currentTrade = trades.get(Integer.parseInt(clickedComponent.getId()));
+
+                TextArea windowText = new TextArea("open mid");
+                VerticalLayout windowContent = new VerticalLayout();
+                Window window = new Window();
+
                 windowText.setSizeFull();
                 windowText.setValue(currentTrade.getBuyInGameMessage());
                 windowText.setReadOnly(true);
+                windowText.focus();
+                windowText.addBlurListener(blurEvent -> window.close());
 
-                VerticalLayout windowContent = new VerticalLayout();
                 windowContent.setWidth("800px");
                 windowContent.setHeight("86px");
                 windowContent.addComponent(windowText);
 
-                Window window = new Window();
                 window.setContent(windowContent);
                 window.setModal(true);
                 window.setResizable(false);
                 window.setClosable(false);
                 window.center();
-                window.addBlurListener(blurEvent -> window.close());
                 this.getUI().addWindow(window);
+
             }
         });
 
