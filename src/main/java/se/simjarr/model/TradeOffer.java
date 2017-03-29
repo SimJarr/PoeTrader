@@ -5,6 +5,7 @@ import se.simjarr.global.Currency;
 import java.util.Comparator;
 
 import static se.simjarr.global.GlobalVariables.ESTIMATED_VALUES;
+import static se.simjarr.global.GlobalVariables.HC_LEGACY;
 import static se.simjarr.global.GlobalVariables.REFERENCE_CURRENCY;
 
 public class TradeOffer {
@@ -64,6 +65,11 @@ public class TradeOffer {
 
     public double getReferenceRatio() {
         return referenceRatio;
+    }
+
+    public String getBuyInGameMessage(){
+        return "@" + ign + " Hi, I´d like to buy your " + sellValue + " " + Currency.fromValue(sellCurrency).getLowerCaseName() +
+                " for my " + buyValue + " " + Currency.fromValue(buyCurrency).getLowerCaseName() + " in " + HC_LEGACY + ".";
     }
 
     @Override
