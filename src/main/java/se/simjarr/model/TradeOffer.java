@@ -11,7 +11,7 @@ public class TradeOffer {
 
     public static Comparator<TradeOffer> sortByValue = (o1, o2) -> {
         if(o1.calculateTradeValue() == o2.calculateTradeValue()) return 0;
-        return (o1.calculateTradeValue() > o2.calculateTradeValue()) ? 1 : -1;
+        return (o1.calculateTradeValue() < o2.calculateTradeValue()) ? 1 : -1;
     };
 
     private String username;
