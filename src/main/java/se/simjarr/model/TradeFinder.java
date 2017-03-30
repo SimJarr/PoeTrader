@@ -88,7 +88,7 @@ public class TradeFinder {
                     updateTradeStock(trade);
                     updateCurrency(availableCurrency, sellCurrency, trade.getSellValue());
                     updateCurrency(availableCurrency, buyCurrency, -trade.getBuyValue());
-                } while (trade.getStock() >= sellValue && availableCurrency.get(buyCurrency) >= buyValue);
+                } while (!notUsable.contains(trade) && availableCurrency.get(buyCurrency) >= buyValue);
             }
         }
         return list;

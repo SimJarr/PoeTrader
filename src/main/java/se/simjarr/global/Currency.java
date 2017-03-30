@@ -34,6 +34,13 @@ public enum Currency {
         this.lowerCaseName = lowerCaseName;
     }
 
+    public static Currency fromName(String name) {
+        for(Currency currency : Currency.values()) {
+            if(currency.name().equals(name)) return currency;
+        }
+        return null;
+    }
+
     public static Currency fromValue(int value) {
         return Currency.values()[value-1];
     }

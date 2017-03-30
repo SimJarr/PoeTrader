@@ -9,7 +9,7 @@ import com.vaadin.ui.*;
 @Theme("valo")
 public class ApplicationUI extends UI {
 
-    private TestLayout testLayout;
+    private SettingsLayout settingsLayout;
     private TestPanelLayout testPanelLayout;
     private TradeFinderLayout tradeFinderLayout;
     private EstimatedValuesContainer estimatedValuesContainer;
@@ -41,10 +41,10 @@ public class ApplicationUI extends UI {
         TabSheet tabSheet = new TabSheet();
         testPanelLayout = new TestPanelLayout();
         tradeFinderLayout = new TradeFinderLayout();
-        testLayout = new TestLayout();
+        settingsLayout = new SettingsLayout();
         tabSheet.addTab(testPanelLayout, "Test Panel");
         tabSheet.addTab(tradeFinderLayout, "Find Trades");
-        tabSheet.addTab(testLayout, "Work in Progress");
+        tabSheet.addTab(settingsLayout, "Work in Progress");
 
         layout.addComponent(tabSheet);
         layout.setExpandRatio(tabSheet, 4);
