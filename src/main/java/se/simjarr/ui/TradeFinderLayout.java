@@ -6,6 +6,7 @@ import com.vaadin.shared.Registration;
 import com.vaadin.shared.ui.slider.SliderOrientation;
 import com.vaadin.ui.*;
 import se.simjarr.global.Currency;
+import se.simjarr.global.GlobalVariables;
 import se.simjarr.model.TradeFinder;
 import se.simjarr.model.TradeOffer;
 
@@ -62,13 +63,18 @@ public class TradeFinderLayout extends VerticalLayout {
 
         Button sendButton = new Button("Send");
         sendButton.addClickListener(clickEvent -> {
-            Map<Currency, Integer> myCurrency = new HashMap<>();
-            currencyId.forEach((k, v) -> {
-                Slider slider = (Slider) findComponentById(this, v);
-                assert slider != null;
-                int sliderValue = slider.getValue().intValue();
-                myCurrency.put(k, sliderValue);
-            });
+            Map<Currency, Integer> myCurrency;
+            if(GlobalVariables.INVENTORY == null) {
+                myCurrency = new HashMap<>();
+                currencyId.forEach((k, v) -> {
+                    Slider slider = (Slider) findComponentById(this, v);
+                    assert slider != null;
+                    int sliderValue = slider.getValue().intValue();
+                    myCurrency.put(k, sliderValue);
+                });
+            } else {
+                myCurrency = new HashMap<>(GlobalVariables.INVENTORY);
+            }
             TradeFinder tradeFinder = new TradeFinder();
             tradeFinder.setAvailableCurrency(myCurrency);
             double minProfitPerTrade;
