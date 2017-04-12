@@ -22,6 +22,7 @@ public class EstimatedValuesList extends GridLayout {
         this.setMargin(true);
         generateMatrixGrid(16);
         addEstimatedValuesStructure();
+        fetchRatios();
     }
 
     private void addEstimatedValuesStructure() {
