@@ -4,6 +4,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
+import se.simjarr.global.GlobalVariables;
 
 @SpringUI
 @Theme("valo")
@@ -24,6 +25,7 @@ public class ApplicationUI extends UI {
     }
 
     private void setupLayout() {
+        GlobalVariables.reset();
         layout = new HorizontalLayout();
         layout.setWidth("100%");
         layout.setHeight("100%");
