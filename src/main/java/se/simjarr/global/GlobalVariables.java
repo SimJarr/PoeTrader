@@ -1,4 +1,7 @@
 package se.simjarr.global;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HasComponents;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,5 +22,23 @@ public abstract class GlobalVariables {
         INVENTORY = null;
         REFERENCE_CURRENCY = CHAOS_ORB;
         ESTIMATED_VALUES = new HashMap<>();
+    }
+
+    public static final int TESTPANELAYOUT_INDEX = 0;
+    public static final int TRADEFINDERLAYOUT_INDEX = 1;
+    public static final int SETTINGSLAYOUT_INDEX = 2;
+
+    public static Component findComponentById(HasComponents root, String id) {
+        for (Component child : root) {
+            if (id.equals(child.getId())) {
+                return child;
+            } else if (child instanceof HasComponents) {
+                Component result = findComponentById((HasComponents) child, id);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null;
     }
 }

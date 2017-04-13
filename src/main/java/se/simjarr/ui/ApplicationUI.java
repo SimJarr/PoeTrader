@@ -44,9 +44,12 @@ public class ApplicationUI extends UI {
         testPanelLayout = new TestPanelLayout();
         tradeFinderLayout = new TradeFinderLayout();
         settingsLayout = new SettingsLayout();
-        tabSheet.addTab(testPanelLayout, "Test Panel");
-        tabSheet.addTab(tradeFinderLayout, "Find Trades");
-        tabSheet.addTab(settingsLayout, "Work in Progress");
+        tabSheet.addTab(testPanelLayout, GlobalVariables.TESTPANELAYOUT_INDEX);
+        tabSheet.getTab(testPanelLayout).setCaption("Test Panel");
+        tabSheet.addTab(tradeFinderLayout, GlobalVariables.TRADEFINDERLAYOUT_INDEX);
+        tabSheet.getTab(tradeFinderLayout).setCaption("Find Trades");
+        tabSheet.addTab(settingsLayout, GlobalVariables.SETTINGSLAYOUT_INDEX);
+        tabSheet.getTab(settingsLayout).setCaption("Work in Progress");
 
         layout.addComponent(tabSheet);
         layout.setExpandRatio(tabSheet, 4);
