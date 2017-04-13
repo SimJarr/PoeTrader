@@ -13,6 +13,8 @@ import se.simjarr.model.TradeOffer;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static se.simjarr.global.GlobalVariables.findComponentById;
+
 public class TradeFinderLayout extends VerticalLayout {
 
     private Panel tradeDisplayLayout;
@@ -28,6 +30,7 @@ public class TradeFinderLayout extends VerticalLayout {
 
         addHeader();
         addCurrencySelection();
+        addSearchSection();
         addTradeDisplaySection();
     }
 
@@ -36,8 +39,15 @@ public class TradeFinderLayout extends VerticalLayout {
         this.addComponent(header);
     }
 
-    private void addCurrencySelection() {
-        HorizontalLayout formLayout = new HorizontalLayout();
+    public void addCurrencySelection() {
+        HorizontalLayout currencySection = new HorizontalLayout();
+        HorizontalLayout oldCurrencySection = (HorizontalLayout) findComponentById(this, "currencySection");
+
+        if (oldCurrencySection != null) {
+            oldCurrencySection.removeAllComponents();
+        } else {
+            currencySection = new HorizontalLayout();
+        }
         for (int i = 0; i < Currency.values().length; i++) {
             Currency current = Currency.fromValue(i + 1);
             FileResource icon = current.getFileResource();
@@ -47,12 +57,22 @@ public class TradeFinderLayout extends VerticalLayout {
             slider.setWidth(40, Unit.PIXELS);
             slider.setId(UUID.randomUUID().toString());
             currencyId.put(current, slider.getId());
-            formLayout.addComponent(slider);
+            currencySection.addComponent(slider);
         }
+        currencySection.setId("currencySection");
+
+        if (oldCurrencySection != null){
+            oldCurrencySection.setId(null);
+            oldCurrencySection.addComponent(currencySection);
+        } else {
+            this.addComponent(currencySection);
+        }
+    }
+
+    private void addSearchSection() {
 
         HorizontalLayout horizontalLayout = new HorizontalLayout();
 
-        //TODO: fix alignment
         Label label = new Label();
         label.setValue("MIN PROFIT PER TRADE:");
         label.setDescription("profit in reference currency");
@@ -61,7 +81,7 @@ public class TradeFinderLayout extends VerticalLayout {
         minProfitInput.setWidth(50, Unit.PIXELS);
         minProfitInput.setDescription("default value 0.1");
 
-        Button sendButton = new Button("Send");
+        Button sendButton = new Button("Search");
         sendButton.addClickListener(clickEvent -> {
             Map<Currency, Integer> myCurrency;
             if(GlobalVariables.INVENTORY == null) {
@@ -91,7 +111,7 @@ public class TradeFinderLayout extends VerticalLayout {
 
         horizontalLayout.addComponents(label, minProfitInput, sendButton);
         horizontalLayout.setComponentAlignment(label, Alignment.MIDDLE_CENTER);
-        this.addComponents(formLayout, horizontalLayout);
+        this.addComponent(horizontalLayout);
     }
 
     private void addTradeDisplaySection() {
@@ -158,19 +178,5 @@ public class TradeFinderLayout extends VerticalLayout {
             tradeDisplayLayout.setContent(tradeDisplayList);
         else if (tradeDisplayLayout.getContent() != null)
             tradeDisplayLayout.setContent(new Label(""));
-    }
-
-    private static Component findComponentById(HasComponents root, String id) {
-        for (Component child : root) {
-            if (id.equals(child.getId())) {
-                return child;
-            } else if (child instanceof HasComponents) {
-                Component result = findComponentById((HasComponents) child, id);
-                if (result != null) {
-                    return result;
-                }
-            }
-        }
-        return null;
     }
 }

@@ -3,10 +3,8 @@ package se.simjarr.ui;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.NativeSelect;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.ui.*;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import se.simjarr.global.Currency;
@@ -20,9 +18,13 @@ import java.util.List;
 
 import static se.simjarr.global.Cookies.createCookie;
 import static se.simjarr.global.Cookies.getCookieByName;
+import static se.simjarr.global.GlobalVariables.INVENTORY;
 import static se.simjarr.global.GlobalVariables.REFERENCE_CURRENCY;
+import static se.simjarr.global.GlobalVariables.findComponentById;
 
 public class SettingsLayout extends VerticalLayout {
+
+    private TradeFinderLayout tradeFinderLayout;
 
     public SettingsLayout() {
         createCookies();
@@ -38,21 +40,24 @@ public class SettingsLayout extends VerticalLayout {
         Button button = new Button("Load Inventory");
 
         button.addClickListener(clickEvent -> {
-            try {
-                Connection.Response response = Jsoup.connect("https://poe-api.herokuapp.com/currency-stash/user/" + textField.getValue()).ignoreContentType(true).maxBodySize(0).execute();
-                String json = response.body();
+            if (!textField.getValue().equals("")) {
+                try {
+                    Connection.Response response = Jsoup.connect("https://poe-api.herokuapp.com/currency-stash/user/" + textField.getValue()).ignoreContentType(true).maxBodySize(0).execute();
+                    String json = response.body();
 
-                JsonParser jsonParser = new JsonParser();
-                JsonArray jsonArray = jsonParser.parse(json).getAsJsonArray();
-                InventoryData inventoryData = new InventoryData();
+                    JsonParser jsonParser = new JsonParser();
+                    JsonArray jsonArray = jsonParser.parse(json).getAsJsonArray();
+                    InventoryData inventoryData = new InventoryData();
 
-                jsonArray.forEach(jsonElement -> {
-                    InventoryData id = new InventoryData((JsonObject) jsonElement);
-                    inventoryData.merge(id);
-                });
-                GlobalVariables.INVENTORY = new HashMap<>(inventoryData.toMap());
-            } catch (IOException e) {
-                e.printStackTrace();
+                    jsonArray.forEach(jsonElement -> {
+                        InventoryData id = new InventoryData((JsonObject) jsonElement);
+                        inventoryData.merge(id);
+                    });
+                    GlobalVariables.INVENTORY = new HashMap<>(inventoryData.toMap());
+                    setCurrencySection();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -60,17 +65,53 @@ public class SettingsLayout extends VerticalLayout {
         this.addComponent(layout);
     }
 
+    private void setCurrencySection() {
+        tradeFinderLayout = ((TradeFinderLayout) ((TabSheet) this.getParent()).getTab(GlobalVariables.TRADEFINDERLAYOUT_INDEX).getComponent());
+        HorizontalLayout currencySection = (HorizontalLayout) findComponentById(tradeFinderLayout, "currencySection");
+        assert currencySection != null;
+        currencySection.removeAllComponents();
+        GridLayout inventoryLayout = new GridLayout();
+        inventoryLayout.setRows(2);
+        inventoryLayout.setColumns(16);
+        int currentCurrency = 1;
+        for (int i = 1; i <= inventoryLayout.getRows(); i++) {
+            for (int j = 1; j <= inventoryLayout.getColumns(); j++) {
+                Label child = new Label("", ContentMode.HTML);
+                if (((i - 1) * 16 + j) % 2 == 1) {
+                    child.setIcon(Currency.fromValue(currentCurrency).getFileResource());
+                    currentCurrency++;
+                    inventoryLayout.addComponent(child);
+                    inventoryLayout.setComponentAlignment(child, Alignment.MIDDLE_LEFT);
+                } else {
+                    child.setValue("<b>" + INVENTORY.get(Currency.fromValue(currentCurrency - 1)) + "</b>");
+                    child.setWidth("50px");
+                    inventoryLayout.addComponent(child);
+                    inventoryLayout.setComponentAlignment(child, Alignment.MIDDLE_RIGHT);
+                }
+            }
+        }
+        currencySection.setId("currencySection");
+        currencySection.addComponent(inventoryLayout);
+        Button button = new Button("Reset Inventory");
+        button.addClickListener(clickEvent -> {
+            INVENTORY = null;
+            tradeFinderLayout = ((TradeFinderLayout) ((TabSheet) this.getParent()).getTab(GlobalVariables.TRADEFINDERLAYOUT_INDEX).getComponent());
+            tradeFinderLayout.addCurrencySelection();
+        });
+        currencySection.addComponent(button);
+    }
+
+
     private void addReferenceCurrencySelection() {
         List<String> currencies = new ArrayList<>();
-        for(Currency currency : Currency.values()) {
+        for (Currency currency : Currency.values()) {
             currencies.add(currency.name());
         }
         NativeSelect<String> currencySelection = new NativeSelect<>("Select Reference Currency", currencies);
         currencySelection.setEmptySelectionAllowed(false);
         currencySelection.setSelectedItem("CHAOS_ORB");
         currencySelection.addSelectionListener(event -> {
-            System.out.println(event.getValue());
-            if(getCookieByName("REFERENCE_CURRENCY") == null) createCookie("REFERENCE_CURRENCY", "CHAOS_ORB");
+            if (getCookieByName("REFERENCE_CURRENCY") == null) createCookie("REFERENCE_CURRENCY", "CHAOS_ORB");
             getCookieByName("REFERENCE_CURRENCY").setValue(event.getValue());
             REFERENCE_CURRENCY = Currency.fromName(event.getValue());
         });
@@ -90,10 +131,10 @@ public class SettingsLayout extends VerticalLayout {
     }
 
     private void createCookies() {
-        if(getCookieByName("REFERENCE_CURRENCY") == null)
+        if (getCookieByName("REFERENCE_CURRENCY") == null)
             createCookie("REFERENCE_CURRENCY", "CHAOS_ORB");
 
-        if(getCookieByName("LEAGUE") == null)
+        if (getCookieByName("LEAGUE") == null)
             createCookie("LEAGUE", "Hardcore+Legacy");
     }
 }
