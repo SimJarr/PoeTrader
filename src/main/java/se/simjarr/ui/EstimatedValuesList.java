@@ -4,6 +4,7 @@ import com.vaadin.server.FileResource;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import se.simjarr.global.Currency;
+import se.simjarr.global.ThreadLocalVariables;
 import se.simjarr.model.*;
 
 import java.math.BigDecimal;
@@ -15,7 +16,10 @@ import static se.simjarr.global.GlobalVariables.*;
 
 public class EstimatedValuesList extends GridLayout {
 
+    private ThreadLocalVariables threadLocalVariables;
+
     public EstimatedValuesList() {
+        threadLocalVariables = ((ApplicationUI) UI.getCurrent()).getThreadLocalVariables();
         this.addStyleName("outlined");
         this.setWidth("220px");
         this.setHeight("320px");
@@ -82,13 +86,13 @@ public class EstimatedValuesList extends GridLayout {
         for (Ratio r : ratios) {
 
             String color = "#000000"; //black
-            if (ESTIMATED_VALUES.get(r.getCurrency()) != null && ESTIMATED_VALUES.get(r.getCurrency()) > (1 / r.getRatio())) {
+            if (threadLocalVariables.getEstimatedValues().get(r.getCurrency()) != null && threadLocalVariables.getEstimatedValues().get(r.getCurrency()) > (1 / r.getRatio())) {
                 if (r.isFlipped()){
                     color = "#00aa00"; //green
                 } else {
                     color = "#aa0000"; //red
                 }
-            } else if (ESTIMATED_VALUES.get(r.getCurrency()) != null && ESTIMATED_VALUES.get(r.getCurrency()) < (1 / r.getRatio())){
+            } else if (threadLocalVariables.getEstimatedValues().get(r.getCurrency()) != null && threadLocalVariables.getEstimatedValues().get(r.getCurrency()) < (1 / r.getRatio())){
                 if (r.isFlipped()){
                     color = "#aa0000"; //red
                 } else {
@@ -106,8 +110,8 @@ public class EstimatedValuesList extends GridLayout {
             this.setComponentAlignment(this.getComponent(1, r.getRow()), Alignment.MIDDLE_RIGHT);
             this.setComponentAlignment(this.getComponent(3, r.getRow()), Alignment.MIDDLE_LEFT);
 
-            ESTIMATED_VALUES.put(r.getCurrency(), 1 / r.getRatio());
+            threadLocalVariables.getEstimatedValues().put(r.getCurrency(), 1 / r.getRatio());
         }
-        ESTIMATED_VALUES.put(REFERENCE_CURRENCY, 1.0);
+        threadLocalVariables.getEstimatedValues().put(REFERENCE_CURRENCY, 1.0);
     }
 }

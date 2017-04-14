@@ -5,6 +5,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import se.simjarr.global.GlobalVariables;
+import se.simjarr.global.ThreadLocalVariables;
 
 @SpringUI
 @Theme("valo")
@@ -15,9 +16,11 @@ public class ApplicationUI extends UI {
     private TradeFinderLayout tradeFinderLayout;
     private EstimatedValuesContainer estimatedValuesContainer;
     private HorizontalLayout layout;
+    private ThreadLocalVariables threadLocalVariables;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+        threadLocalVariables = new ThreadLocalVariables();
         setupLayout();
         addLeftSide();
         addTabs();
@@ -25,7 +28,6 @@ public class ApplicationUI extends UI {
     }
 
     private void setupLayout() {
-        GlobalVariables.reset();
         layout = new HorizontalLayout();
         layout.setWidth("100%");
         layout.setHeight("100%");
@@ -59,5 +61,9 @@ public class ApplicationUI extends UI {
         estimatedValuesContainer = new EstimatedValuesContainer();
         layout.addComponent(estimatedValuesContainer);
         layout.setExpandRatio(estimatedValuesContainer, 2);
+    }
+
+    public ThreadLocalVariables getThreadLocalVariables() {
+        return threadLocalVariables;
     }
 }

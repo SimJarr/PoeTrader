@@ -8,6 +8,7 @@ import java.util.List;
 
 import static se.simjarr.global.GlobalVariables.REFERENCE_CURRENCY;
 
+
 public abstract class TradeBank {
 
     private static List<TradeOffer> allTrades;

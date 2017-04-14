@@ -7,6 +7,7 @@ import com.vaadin.shared.ui.slider.SliderOrientation;
 import com.vaadin.ui.*;
 import se.simjarr.global.Currency;
 import se.simjarr.global.GlobalVariables;
+import se.simjarr.global.ThreadLocalVariables;
 import se.simjarr.model.TradeFinder;
 import se.simjarr.model.TradeOffer;
 
@@ -22,8 +23,10 @@ public class TradeFinderLayout extends VerticalLayout {
     private TextField minProfitInput;
     private Map<Currency, String> currencyId;
     private Registration textAreaListener;
+    private ThreadLocalVariables threadLocalVariables;
 
     public TradeFinderLayout() {
+        threadLocalVariables = ((ApplicationUI) UI.getCurrent()).getThreadLocalVariables();
         tradeDisplayLayout = new Panel();
         tradeDisplayList = new Accordion();
         currencyId = new HashMap<>();
@@ -84,7 +87,7 @@ public class TradeFinderLayout extends VerticalLayout {
         Button sendButton = new Button("Search");
         sendButton.addClickListener(clickEvent -> {
             Map<Currency, Integer> myCurrency;
-            if(GlobalVariables.INVENTORY == null) {
+            if(threadLocalVariables.getInventory() == null) {
                 myCurrency = new HashMap<>();
                 currencyId.forEach((k, v) -> {
                     Slider slider = (Slider) findComponentById(this, v);
@@ -93,7 +96,7 @@ public class TradeFinderLayout extends VerticalLayout {
                     myCurrency.put(k, sliderValue);
                 });
             } else {
-                myCurrency = new HashMap<>(GlobalVariables.INVENTORY);
+                myCurrency = new HashMap<>(threadLocalVariables.getInventory());
             }
             TradeFinder tradeFinder = new TradeFinder();
             tradeFinder.setAvailableCurrency(myCurrency);

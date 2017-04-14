@@ -9,6 +9,7 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import se.simjarr.global.Currency;
 import se.simjarr.global.GlobalVariables;
+import se.simjarr.global.ThreadLocalVariables;
 import se.simjarr.model.InventoryData;
 
 import java.io.IOException;
@@ -18,17 +19,16 @@ import java.util.List;
 
 import static se.simjarr.global.Cookies.createCookie;
 import static se.simjarr.global.Cookies.getCookieByName;
-import static se.simjarr.global.GlobalVariables.INVENTORY;
-import static se.simjarr.global.GlobalVariables.REFERENCE_CURRENCY;
-import static se.simjarr.global.GlobalVariables.findComponentById;
+import static se.simjarr.global.GlobalVariables.*;
 
 public class SettingsLayout extends VerticalLayout {
 
     private TradeFinderLayout tradeFinderLayout;
+    private ThreadLocalVariables threadLocalVariables;
 
     public SettingsLayout() {
+        threadLocalVariables = ((ApplicationUI) UI.getCurrent()).getThreadLocalVariables();
         createCookies();
-        addReferenceCurrencySelection();
         addLeagueSelection();
         addInventoryLoadSection();
     }
@@ -53,7 +53,7 @@ public class SettingsLayout extends VerticalLayout {
                         InventoryData id = new InventoryData((JsonObject) jsonElement);
                         inventoryData.merge(id);
                     });
-                    GlobalVariables.INVENTORY = new HashMap<>(inventoryData.toMap());
+                    threadLocalVariables.setInventory(new HashMap<>(inventoryData.toMap()));
                     setCurrencySection();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -83,7 +83,7 @@ public class SettingsLayout extends VerticalLayout {
                     inventoryLayout.addComponent(child);
                     inventoryLayout.setComponentAlignment(child, Alignment.MIDDLE_LEFT);
                 } else {
-                    child.setValue("<b>" + INVENTORY.get(Currency.fromValue(currentCurrency - 1)) + "</b>");
+                    child.setValue("<b>" + threadLocalVariables.getInventory().get(Currency.fromValue(currentCurrency - 1)) + "</b>");
                     child.setWidth("50px");
                     inventoryLayout.addComponent(child);
                     inventoryLayout.setComponentAlignment(child, Alignment.MIDDLE_RIGHT);
@@ -94,28 +94,11 @@ public class SettingsLayout extends VerticalLayout {
         currencySection.addComponent(inventoryLayout);
         Button button = new Button("Reset Inventory");
         button.addClickListener(clickEvent -> {
-            INVENTORY = null;
+            threadLocalVariables.setInventory(null);
             tradeFinderLayout = ((TradeFinderLayout) ((TabSheet) this.getParent()).getTab(GlobalVariables.TRADEFINDERLAYOUT_INDEX).getComponent());
             tradeFinderLayout.addCurrencySelection();
         });
         currencySection.addComponent(button);
-    }
-
-
-    private void addReferenceCurrencySelection() {
-        List<String> currencies = new ArrayList<>();
-        for (Currency currency : Currency.values()) {
-            currencies.add(currency.name());
-        }
-        NativeSelect<String> currencySelection = new NativeSelect<>("Select Reference Currency", currencies);
-        currencySelection.setEmptySelectionAllowed(false);
-        currencySelection.setSelectedItem("CHAOS_ORB");
-        currencySelection.addSelectionListener(event -> {
-            if (getCookieByName("REFERENCE_CURRENCY") == null) createCookie("REFERENCE_CURRENCY", "CHAOS_ORB");
-            getCookieByName("REFERENCE_CURRENCY").setValue(event.getValue());
-            REFERENCE_CURRENCY = Currency.fromName(event.getValue());
-        });
-        this.addComponent(currencySelection);
     }
 
     private void addLeagueSelection() {
@@ -131,9 +114,6 @@ public class SettingsLayout extends VerticalLayout {
     }
 
     private void createCookies() {
-        if (getCookieByName("REFERENCE_CURRENCY") == null)
-            createCookie("REFERENCE_CURRENCY", "CHAOS_ORB");
-
         if (getCookieByName("LEAGUE") == null)
             createCookie("LEAGUE", "Hardcore+Legacy");
     }

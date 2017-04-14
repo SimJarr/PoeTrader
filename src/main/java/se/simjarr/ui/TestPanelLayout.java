@@ -2,22 +2,24 @@ package se.simjarr.ui;
 
 import com.vaadin.ui.*;
 import se.simjarr.global.Currency;
+import se.simjarr.global.ThreadLocalVariables;
 import se.simjarr.model.CurrencyTradeUrlBuilder;
 import se.simjarr.model.HttpRequestHandler;
 import se.simjarr.model.TradeOffer;
 
 import java.util.List;
 
-import static se.simjarr.global.GlobalVariables.ESTIMATED_VALUES;
-import static se.simjarr.global.GlobalVariables.HC_LEGACY;
 import static se.simjarr.global.Currency.*;
+import static se.simjarr.global.GlobalVariables.HC_LEGACY;
 
 public class TestPanelLayout extends VerticalLayout{
 
     private TextArea responseText;
     private String url;
+    private ThreadLocalVariables threadLocalVariables;
 
     public TestPanelLayout() {
+        threadLocalVariables = ((ApplicationUI) UI.getCurrent()).getThreadLocalVariables();
         addHeader();
         addCurrencySelection();
         addResponseText();
@@ -44,7 +46,7 @@ public class TestPanelLayout extends VerticalLayout{
             StringBuilder responseBuilder = new StringBuilder();
             tradeOffers.forEach(x -> responseBuilder.append(x.getUsername()).append(", "));
             //TODO this is now my testing-output
-            responseText.setValue(ESTIMATED_VALUES.toString());
+            responseText.setValue(threadLocalVariables.getEstimatedValues().toString());
         });
 
         formLayout.addComponents(have, want, send);

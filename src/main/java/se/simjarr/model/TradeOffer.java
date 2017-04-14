@@ -1,10 +1,12 @@
 package se.simjarr.model;
 
+import com.vaadin.ui.UI;
 import se.simjarr.global.Currency;
+import se.simjarr.global.ThreadLocalVariables;
+import se.simjarr.ui.ApplicationUI;
 
 import java.util.Comparator;
 
-import static se.simjarr.global.GlobalVariables.ESTIMATED_VALUES;
 import static se.simjarr.global.GlobalVariables.HC_LEGACY;
 import static se.simjarr.global.GlobalVariables.REFERENCE_CURRENCY;
 
@@ -23,8 +25,10 @@ public class TradeOffer {
     private String ign;
     private int stock;
     private double referenceRatio;
+    private ThreadLocalVariables threadLocalVariables;
 
     public TradeOffer(String username, String sellCurrency, String sellValue, String buyCurrency, String buyValue, String ign, String stock) {
+        threadLocalVariables = ((ApplicationUI) UI.getCurrent()).getThreadLocalVariables();
         this.username = username;
         this.sellCurrency = Integer.parseInt(sellCurrency);
         this.sellValue = (int) Double.parseDouble(sellValue);
@@ -81,8 +85,8 @@ public class TradeOffer {
     }
 
     public double calculateTradeValue() {
-        double sellValueAsReferenceCurrency = sellValue * ESTIMATED_VALUES.get(Currency.fromValue(sellCurrency));
-        double buyValueAsReferenceCurrency = buyValue * ESTIMATED_VALUES.get(Currency.fromValue(buyCurrency));
+        double sellValueAsReferenceCurrency = sellValue * threadLocalVariables.getEstimatedValues().get(Currency.fromValue(sellCurrency));
+        double buyValueAsReferenceCurrency = buyValue * threadLocalVariables.getEstimatedValues().get(Currency.fromValue(buyCurrency));
 
         return sellValueAsReferenceCurrency - buyValueAsReferenceCurrency;
     }
