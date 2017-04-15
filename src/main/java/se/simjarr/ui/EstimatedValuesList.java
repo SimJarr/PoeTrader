@@ -45,7 +45,7 @@ public class EstimatedValuesList extends GridLayout {
 
     void fetchRatios() {
         List<Ratio> ratios = new ArrayList<>();
-        TradeBank.refreshTrades(HC_LEGACY, true);
+        TradeBank.refreshTrades(threadLocalVariables.getSelectedLeague().getUrlName(), true);
 
         for (int i = 0; i < this.getRows(); i++) {
             if (i != REFERENCE_CURRENCY.getIntValue() - 1) {

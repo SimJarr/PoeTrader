@@ -10,7 +10,6 @@ import se.simjarr.model.TradeOffer;
 import java.util.List;
 
 import static se.simjarr.global.Currency.*;
-import static se.simjarr.global.GlobalVariables.HC_LEGACY;
 
 public class TestPanelLayout extends VerticalLayout{
 
@@ -61,7 +60,7 @@ public class TestPanelLayout extends VerticalLayout{
     }
 
     private void setRequestUrl(CheckBoxGroup<Currency> have, CheckBoxGroup<Currency> want) {
-        CurrencyTradeUrlBuilder urlBuilder = new CurrencyTradeUrlBuilder(HC_LEGACY, true);
+        CurrencyTradeUrlBuilder urlBuilder = new CurrencyTradeUrlBuilder(threadLocalVariables.getSelectedLeague().getUrlName(), true);
         urlBuilder.setHave(have.getSelectedItems().toArray(new Currency[have.getSelectedItems().size()]))
                   .setWant(want.getSelectedItems().toArray(new Currency[want.getSelectedItems().size()]));
         url = urlBuilder.build();
