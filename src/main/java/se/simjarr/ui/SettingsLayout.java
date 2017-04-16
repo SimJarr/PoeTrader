@@ -9,16 +9,17 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import se.simjarr.global.Currency;
 import se.simjarr.global.GlobalVariables;
+import se.simjarr.global.League;
 import se.simjarr.global.ThreadLocalVariables;
 import se.simjarr.model.InventoryData;
 
+import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static se.simjarr.global.Cookies.createCookie;
-import static se.simjarr.global.Cookies.getCookieByName;
+import static se.simjarr.global.Cookies.*;
 import static se.simjarr.global.GlobalVariables.*;
 
 public class SettingsLayout extends VerticalLayout {
@@ -28,7 +29,6 @@ public class SettingsLayout extends VerticalLayout {
 
     public SettingsLayout() {
         threadLocalVariables = ((ApplicationUI) UI.getCurrent()).getThreadLocalVariables();
-        createCookies();
         addLeagueSelection();
         addInventoryLoadSection();
     }
@@ -103,18 +103,21 @@ public class SettingsLayout extends VerticalLayout {
 
     private void addLeagueSelection() {
         List<String> leagues = new ArrayList<>();
-        leagues.add("Legacy");
-        leagues.add("Hardcore Legacy");
-        leagues.add("Standard");
-        leagues.add("Hardcore");
+        for(League league : League.values()) leagues.add(league.getDisplayName());
         NativeSelect<String> leagueSelection = new NativeSelect<>("Select League", leagues);
         leagueSelection.setEmptySelectionAllowed(false);
-        leagueSelection.setSelectedItem("Hardcore Legacy");
-        this.addComponent(leagueSelection);
-    }
 
-    private void createCookies() {
-        if (getCookieByName("LEAGUE") == null)
-            createCookie("LEAGUE", "Hardcore+Legacy");
+        Cookie leagueCookie = getCookieByName(LEAGUE_COOKIE);
+        if(leagueCookie != null) leagueSelection.setSelectedItem(leagueCookie.getValue());
+
+        leagueSelection.addValueChangeListener(valueChangeEvent -> {
+            League selectedLeague = League.fromDisplayName(valueChangeEvent.getValue());
+            if (selectedLeague != null) {
+                threadLocalVariables.setSelectedLeague(selectedLeague);
+                createCookie(LEAGUE_COOKIE, selectedLeague.getUrlName());
+            }
+        });
+
+        this.addComponent(leagueSelection);
     }
 }
