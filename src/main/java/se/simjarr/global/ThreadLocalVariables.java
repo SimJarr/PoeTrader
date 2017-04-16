@@ -1,12 +1,16 @@
 package se.simjarr.global;
 
+import javax.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.Map;
+import static se.simjarr.global.Cookies.*;
 
 public class ThreadLocalVariables {
 
     public ThreadLocalVariables() {
         setDefault();
+        Cookie leagueCookie = getCookieByName(LEAGUE_COOKIE);
+        if(leagueCookie != null) setSelectedLeague(League.fromName(leagueCookie.getValue()));
     }
 
     private Map<Currency, Integer> inventory;

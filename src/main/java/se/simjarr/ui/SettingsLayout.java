@@ -50,8 +50,10 @@ public class SettingsLayout extends VerticalLayout {
                     InventoryData inventoryData = new InventoryData();
 
                     jsonArray.forEach(jsonElement -> {
-                        InventoryData id = new InventoryData((JsonObject) jsonElement);
-                        inventoryData.merge(id);
+                        if(((JsonObject)jsonElement).get("league").getAsString().equals(threadLocalVariables.getSelectedLeague().getDisplayName())) {
+                            InventoryData id = new InventoryData((JsonObject) jsonElement);
+                            inventoryData.merge(id);
+                        }
                     });
                     threadLocalVariables.setInventory(new HashMap<>(inventoryData.toMap()));
                     setCurrencySection();
