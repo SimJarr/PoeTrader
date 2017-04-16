@@ -114,7 +114,7 @@ public class SettingsLayout extends VerticalLayout {
             League selectedLeague = League.fromDisplayName(valueChangeEvent.getValue());
             if (selectedLeague != null) {
                 threadLocalVariables.setSelectedLeague(selectedLeague);
-                createCookie(LEAGUE_COOKIE, selectedLeague.getUrlName());
+                createCookie(LEAGUE_COOKIE, selectedLeague.getDisplayName());
             }
         });
 
