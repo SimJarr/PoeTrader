@@ -21,4 +21,6 @@ public abstract class Cookies {
         }
         return null;
     }
+
+    public static final String LEAGUE_COOKIE = "LEAGUE";
 }
