@@ -15,9 +15,9 @@ public enum League {
         this.urlName = name.replace(" ", "+");
     }
 
-    public static League fromDisplayName(String displayName) {
+    public static League fromName(String name) {
         for(League league : League.values()) {
-            if(league.getDisplayName().equals(displayName)) return league;
+            if(league.getDisplayName().equals(name) || league.getUrlName().equals(name)) return league;
         }
         return null;
     }

@@ -108,13 +108,13 @@ public class SettingsLayout extends VerticalLayout {
         leagueSelection.setEmptySelectionAllowed(false);
 
         Cookie leagueCookie = getCookieByName(LEAGUE_COOKIE);
-        if(leagueCookie != null) leagueSelection.setSelectedItem(leagueCookie.getValue());
+        if(leagueCookie != null) leagueSelection.setSelectedItem(leagueCookie.getValue().replace("+", " "));
 
         leagueSelection.addValueChangeListener(valueChangeEvent -> {
-            League selectedLeague = League.fromDisplayName(valueChangeEvent.getValue());
+            League selectedLeague = League.fromName(valueChangeEvent.getValue());
             if (selectedLeague != null) {
                 threadLocalVariables.setSelectedLeague(selectedLeague);
-                createCookie(LEAGUE_COOKIE, selectedLeague.getDisplayName());
+                createCookie(LEAGUE_COOKIE, selectedLeague.getUrlName());
             }
         });
 
