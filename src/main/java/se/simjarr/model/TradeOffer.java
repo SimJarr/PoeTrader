@@ -90,7 +90,6 @@ public class TradeOffer {
         return sellValueAsReferenceCurrency - buyValueAsReferenceCurrency;
     }
 
-    //TODO: no good, we want a real one
     private double calculateRatioComparedToReference() {
         if (sellCurrency != REFERENCE_CURRENCY.getIntValue() && buyCurrency != REFERENCE_CURRENCY.getIntValue()) {
             return 0;
