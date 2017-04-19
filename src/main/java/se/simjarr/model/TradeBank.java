@@ -16,16 +16,15 @@ public abstract class TradeBank {
     public static double estimateValue(Currency currency, int sampleSize) {
         List<TradeOffer> tradeBuyCurrency = selectTrades(currency, REFERENCE_CURRENCY, null, null);
         List<TradeOffer> tradeSellCurrency = selectTrades(REFERENCE_CURRENCY, currency, null, null);
-        int minSize = tradeBuyCurrency.size() > tradeSellCurrency.size() ? tradeSellCurrency.size() : tradeBuyCurrency.size();
-        sampleSize = minSize > sampleSize ? sampleSize : minSize;
+        int buySize = tradeBuyCurrency.size() < sampleSize ? tradeBuyCurrency.size() : sampleSize;
+        int sellSize = tradeSellCurrency.size() < sampleSize ? tradeSellCurrency.size() : sampleSize;
 
-        double value = 0;
-        for(int i = 0; i < sampleSize; i++) {
-            double buyValue = tradeBuyCurrency.get(i).getReferenceRatio();
-            double sellValue = tradeSellCurrency.get(i).getReferenceRatio();
-            value += (buyValue + sellValue) / 2;
-        }
-        return value / sampleSize;
+        if (buySize <= 0 || sellSize <= 0) return -1;
+
+        double buyValue = findOneWayRatio(tradeBuyCurrency, buySize);
+        double sellValue = findOneWayRatio(tradeSellCurrency, sellSize);
+
+        return (buyValue + sellValue) / 2;
     }
 
     public static List<TradeOffer> selectTrades(Currency buyCurrency, Currency sellCurrency, Double minValue, Integer sampleSize) {
@@ -52,5 +51,14 @@ public abstract class TradeBank {
         CurrencyTradeUrlBuilder urlBuilder = new CurrencyTradeUrlBuilder(league, online);
         String requestUrl = urlBuilder.setHave(arr).setWant(arr).build();
         allTrades = HttpRequestHandler.fetchTradesFromUrl(requestUrl);
+    }
+
+    private static double findOneWayRatio(List<TradeOffer> tradeCurrency, int size) {
+
+        double value = 0;
+        for(int i = 0; i < size; i++) {
+            value += tradeCurrency.get(i).getReferenceRatio();
+        }
+        return value / size;
     }
 }

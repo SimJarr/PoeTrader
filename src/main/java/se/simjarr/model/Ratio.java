@@ -2,6 +2,8 @@ package se.simjarr.model;
 
 import se.simjarr.global.Currency;
 
+import java.math.BigDecimal;
+
 public class Ratio {
 
     private Currency currency;
@@ -12,7 +14,7 @@ public class Ratio {
     public Ratio(Currency currency, double ratio, boolean flipped, int row) {
         this.currency = currency;
         this.ratio = ratio;
-        this.flipped = flipped;
+        this.flipped = (ratio == -1) != flipped;
         this.row = row;
     }
 
@@ -30,5 +32,12 @@ public class Ratio {
 
     public int getRow() {
         return row;
+    }
+
+    @Override
+    public String toString() {
+        if (ratio == -1) return "N/A";
+        if (flipped) return new BigDecimal(1 / ratio).setScale(3, BigDecimal.ROUND_HALF_UP).toString();
+        return new BigDecimal(ratio).setScale(3, BigDecimal.ROUND_HALF_UP).toString();
     }
 }

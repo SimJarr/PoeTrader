@@ -7,7 +7,6 @@ import se.simjarr.global.Currency;
 import se.simjarr.global.ThreadLocalVariables;
 import se.simjarr.model.*;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,8 +76,7 @@ public class EstimatedValuesList extends GridLayout {
     private Ratio createRatio(Currency currency, int sampleSize, int row) {
         double estimatedValue = TradeBank.estimateValue(currency, sampleSize);
 
-        if (estimatedValue < 1) return new Ratio(currency, estimatedValue, true, row);
-        else return new Ratio(currency, estimatedValue, false, row);
+        return new Ratio(currency, estimatedValue, estimatedValue < 1, row);
     }
 
     private void updateRatios(List<Ratio> ratios) {
@@ -101,11 +99,11 @@ public class EstimatedValuesList extends GridLayout {
             }
 
             if (r.isFlipped()) {
-                ((Label) this.getComponent(1, r.getRow())).setValue("<font color=" + color + "><b>" + new BigDecimal(1 / r.getRatio()).setScale(3, BigDecimal.ROUND_HALF_UP).toString() + "</b></font>");
+                ((Label) this.getComponent(1, r.getRow())).setValue("<font color=" + color + "><b>" + r.toString() + "</b></font>");
                 ((Label) this.getComponent(3, r.getRow())).setValue("<b>1</b>");
             } else {
                 ((Label) this.getComponent(1, r.getRow())).setValue("<b>1</b>");
-                ((Label) this.getComponent(3, r.getRow())).setValue("<font color=" + color + "><b>" + new BigDecimal(r.getRatio()).setScale(3, BigDecimal.ROUND_HALF_UP).toString() + "</b></font>");
+                ((Label) this.getComponent(3, r.getRow())).setValue("<font color=" + color + "><b>" + r.toString() + "</b></font>");
             }
             this.setComponentAlignment(this.getComponent(1, r.getRow()), Alignment.MIDDLE_RIGHT);
             this.setComponentAlignment(this.getComponent(3, r.getRow()), Alignment.MIDDLE_LEFT);
