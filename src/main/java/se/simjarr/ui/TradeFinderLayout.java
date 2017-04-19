@@ -78,11 +78,10 @@ public class TradeFinderLayout extends VerticalLayout {
 
         Label label = new Label();
         label.setValue("MIN PROFIT PER TRADE:");
-        label.setDescription("profit in reference currency");
 
         minProfitInput = new TextField();
         minProfitInput.setWidth(50, Unit.PIXELS);
-        minProfitInput.setDescription("default value 0.1");
+        minProfitInput.setPlaceholder("0.1");
 
         Button sendButton = new Button("Search");
         sendButton.addClickListener(clickEvent -> {
