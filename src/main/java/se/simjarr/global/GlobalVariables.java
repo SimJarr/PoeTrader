@@ -6,7 +6,6 @@ import static se.simjarr.global.Currency.CHAOS_ORB;
 
 public abstract class GlobalVariables {
 
-    //TODO: create enum for leagues
     public static final Currency REFERENCE_CURRENCY = CHAOS_ORB;
 
     public static final int TESTPANELAYOUT_INDEX = 0;
