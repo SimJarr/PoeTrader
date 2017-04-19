@@ -87,6 +87,7 @@ public class TradeOffer {
         double sellValueAsReferenceCurrency = sellValue * threadLocalVariables.getEstimatedValues().get(Currency.fromValue(sellCurrency));
         double buyValueAsReferenceCurrency = buyValue * threadLocalVariables.getEstimatedValues().get(Currency.fromValue(buyCurrency));
 
+        if (sellValueAsReferenceCurrency < 0 || buyValueAsReferenceCurrency < 0) return -1;
         return sellValueAsReferenceCurrency - buyValueAsReferenceCurrency;
     }
 
