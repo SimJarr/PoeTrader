@@ -85,18 +85,11 @@ public class EstimatedValuesList extends GridLayout {
 
             String color = "#000000"; //black
             if (threadLocalVariables.getEstimatedValues().get(r.getCurrency()) != null && threadLocalVariables.getEstimatedValues().get(r.getCurrency()) > (1 / r.getRatio())) {
-                if (r.isFlipped()){
-                    color = "#00aa00"; //green
-                } else {
-                    color = "#aa0000"; //red
-                }
-            } else if (threadLocalVariables.getEstimatedValues().get(r.getCurrency()) != null && threadLocalVariables.getEstimatedValues().get(r.getCurrency()) < (1 / r.getRatio())){
-                if (r.isFlipped()){
-                    color = "#aa0000"; //red
-                } else {
-                    color = "#00aa00"; //green
-                }
+                color = "#00aa00"; //green
+            } else if (threadLocalVariables.getEstimatedValues().get(r.getCurrency()) != null && threadLocalVariables.getEstimatedValues().get(r.getCurrency()) < (1 / r.getRatio())) {
+                color = "#aa0000"; //red
             }
+            if (r.toString().equals("N/A")) color = "#000000"; //black
 
             if (r.isFlipped()) {
                 ((Label) this.getComponent(1, r.getRow())).setValue("<font color=" + color + "><b>" + r.toString() + "</b></font>");
