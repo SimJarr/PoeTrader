@@ -27,11 +27,13 @@ public enum Currency {
     private int intValue;
     private String imgPath;
     private String lowerCaseName;
+    private String urlName;
 
     Currency(int intValue, String imgPath, String lowerCaseName) {
         this.intValue = intValue;
         this.imgPath = imgPath;
         this.lowerCaseName = lowerCaseName;
+        this.urlName = imgPath.replace("_", "+").replace(".png","").replace("'", "%27");
     }
 
     public static Currency fromName(String name) {
@@ -64,5 +66,9 @@ public enum Currency {
 
     public String getStringValue() {
         return String.valueOf(intValue);
+    }
+
+    public String getUrlName() {
+        return urlName;
     }
 }
