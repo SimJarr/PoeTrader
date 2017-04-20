@@ -1,6 +1,7 @@
 package se.simjarr.model;
 
 import se.simjarr.global.Currency;
+import se.simjarr.global.League;
 
 import java.util.Arrays;
 import java.util.List;
@@ -8,15 +9,15 @@ import java.util.List;
 public class CurrencyTradeUrlBuilder {
 
     private StringBuilder builder;
-    private String leageue;
+    private League league;
     private boolean online;
 
-    public CurrencyTradeUrlBuilder(String league, boolean online) {
-        this.leageue = league;
+    public CurrencyTradeUrlBuilder(League league, boolean online) {
+        this.league = league;
         this.online = online;
         String rootPath = "http://currency.poe.trade/search?league=";
         builder = new StringBuilder(rootPath);
-        builder.append(league);
+        builder.append(league.getUrlName());
         builder.append("&online=");
         if(online) builder.append("x");
     }
@@ -26,7 +27,7 @@ public class CurrencyTradeUrlBuilder {
     }
 
     public CurrencyTradeUrlBuilder reset() {
-        return new CurrencyTradeUrlBuilder(leageue, online);
+        return new CurrencyTradeUrlBuilder(league, online);
     }
 
     public CurrencyTradeUrlBuilder setHave(Currency... haveCurrency) {
