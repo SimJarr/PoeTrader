@@ -3,7 +3,9 @@ package se.simjarr.ui;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import se.simjarr.global.Currency;
 import se.simjarr.global.ThreadLocalVariables;
+import se.simjarr.model.PostTradesUrlParameterBuilder;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -34,7 +36,8 @@ public class TestPanelLayout extends VerticalLayout {
                 con.setRequestMethod("POST");
                 con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
-                String urlParameters = "league=Hardcore+Legacy&apikey=unitegasasiona&sell_currency=Orb+of+Fusing&sell_value=17&buy_value=88&buy_currency=Orb+of+Alchemy";
+                String urlParameters = new PostTradesUrlParameterBuilder(threadLocalVariables.getSelectedLeague(), threadLocalVariables.getApikey())
+                        .addTrade(Currency.CHAOS_ORB, 10, 4, Currency.CARTOGRAPHERS_CHISEL).build();
 
                 con.setDoOutput(true);
                 DataOutputStream wr = new DataOutputStream(con.getOutputStream());
