@@ -1,6 +1,7 @@
 package se.simjarr.model;
 
 import se.simjarr.global.Currency;
+import se.simjarr.global.League;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,7 +42,7 @@ public abstract class TradeBank {
         return result;
     }
 
-    public static void refreshTrades(String league, boolean online) {
+    public static void refreshTrades(League league, boolean online) {
         Currency[] arr = new Currency[Currency.values().length];
         int counter = 0;
         for(Currency c : Currency.values()) {
