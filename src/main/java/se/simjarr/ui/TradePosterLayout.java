@@ -42,8 +42,6 @@ public class TradePosterLayout extends VerticalLayout {
         Button saveButton = new Button("Save & Bump");
         saveButton.addClickListener(clickEvent -> {
             userOfferList.forEach(u -> {
-                TradePreviewHandler tradePreviewHandler = new TradePreviewHandler(u.getSellCurrency(), u.getBuyCurrency());
-                List<TradePreview> xd = tradePreviewHandler.getTradePreviews();
             });
         });
 
