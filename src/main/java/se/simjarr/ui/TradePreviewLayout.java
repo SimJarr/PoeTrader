@@ -101,6 +101,14 @@ public class TradePreviewLayout extends HorizontalLayout {
         @Override
         public void valueChange(HasValue.ValueChangeEvent<String> valueChangeEvent) {
             if(buyCurrency.getValue() != null && sellCurrency.getValue() != null) {
+                if (tradePreviewLayout != null){
+                    ((HorizontalLayout) tradePreviewLayout.getParent()).removeComponent(tradePreviewLayout);
+                    tradePreviewLayout = null;
+                }
+                if (slider != null){
+                    ((HorizontalLayout) slider.getParent()).removeComponent(slider);
+                    slider = null;
+                }
                 if(!buyCurrency.getValue().equals(sellCurrency.getValue())) {
                     TradePreviewHandler tradePreviewHandler = new TradePreviewHandler(getSellCurrency(), getBuyCurrency());
                     setTradePreviews(tradePreviewHandler.getTradePreviews());
