@@ -75,6 +75,13 @@ public class TradeOffer {
                 " for my " + buyValue + " " + Currency.fromValue(buyCurrency).getLowerCaseName() + " in " + threadLocalVariables.getSelectedLeague().getDisplayName() + ".";
     }
 
+    /**
+     * @return Amount of buyCurrency required to purchase 1 sellCurrency
+     */
+    public double getPricePerUnit() {
+        return (double)buyValue/(double)sellValue;
+    }
+
     @Override
     public String toString() {
         return "Username: " + getUsername() +
@@ -83,6 +90,9 @@ public class TradeOffer {
                 "\n" + "Trade value: " + calculateTradeValue();
     }
 
+    /**
+     * @return Value of a trade expressed in reference currency
+     */
     public double calculateTradeValue() {
         double sellValueAsReferenceCurrency = sellValue * threadLocalVariables.getEstimatedValues().get(Currency.fromValue(sellCurrency));
         double buyValueAsReferenceCurrency = buyValue * threadLocalVariables.getEstimatedValues().get(Currency.fromValue(buyCurrency));
@@ -97,6 +107,7 @@ public class TradeOffer {
         }
         return (sellCurrency == REFERENCE_CURRENCY.getIntValue()) ? (double)buyValue/(double)sellValue : (double)sellValue/(double)buyValue;
     }
+
 
     @Override
     public boolean equals(Object o) {
