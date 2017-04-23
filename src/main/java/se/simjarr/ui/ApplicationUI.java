@@ -12,7 +12,7 @@ import se.simjarr.global.ThreadLocalVariables;
 public class ApplicationUI extends UI {
 
     private SettingsLayout settingsLayout;
-    private TestPanelLayout testPanelLayout;
+    private TradePosterLayout tradePosterLayout;
     private TradeFinderLayout tradeFinderLayout;
     private EstimatedValuesContainer estimatedValuesContainer;
     private HorizontalLayout layout;
@@ -43,11 +43,11 @@ public class ApplicationUI extends UI {
 
     private void addTabs() {
         TabSheet tabSheet = new TabSheet();
-        testPanelLayout = new TestPanelLayout();
+        tradePosterLayout = new TradePosterLayout();
         tradeFinderLayout = new TradeFinderLayout();
         settingsLayout = new SettingsLayout();
-        tabSheet.addTab(testPanelLayout, GlobalVariables.TESTPANELAYOUT_INDEX);
-        tabSheet.getTab(testPanelLayout).setCaption("Test Panel");
+        tabSheet.addTab(tradePosterLayout, GlobalVariables.TESTPANELAYOUT_INDEX);
+        tabSheet.getTab(tradePosterLayout).setCaption("Test Panel");
         tabSheet.addTab(tradeFinderLayout, GlobalVariables.TRADEFINDERLAYOUT_INDEX);
         tabSheet.getTab(tradeFinderLayout).setCaption("Find Trades");
         tabSheet.addTab(settingsLayout, GlobalVariables.SETTINGSLAYOUT_INDEX);
