@@ -9,13 +9,13 @@ import se.simjarr.global.Currency;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserOfferLayout extends HorizontalLayout {
+public class TradePreviewLayout extends HorizontalLayout {
 
     private OnDeleteUserOfferListener onDeleteUserOfferListener;
     private NativeSelect<String> sellCurrency;
     private NativeSelect<String> buyCurrency;
 
-    public UserOfferLayout() {
+    public TradePreviewLayout() {
         addDeleteButton();
         addCurrencySelection();
     }
@@ -55,6 +55,6 @@ public class UserOfferLayout extends HorizontalLayout {
     }
 
     public interface OnDeleteUserOfferListener {
-        void onDeleteUserOffer(UserOfferLayout userOfferLayout);
+        void onDeleteUserOffer(TradePreviewLayout tradePreviewLayout);
     }
 }

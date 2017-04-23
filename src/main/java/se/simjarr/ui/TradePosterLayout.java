@@ -20,7 +20,7 @@ public class TradePosterLayout extends VerticalLayout {
 
     private ThreadLocalVariables threadLocalVariables;
     private VerticalLayout userOfferContainer;
-    private List<UserOfferLayout> userOfferList;
+    private List<TradePreviewLayout> userOfferList;
 
     public TradePosterLayout() {
         threadLocalVariables = ((ApplicationUI) UI.getCurrent()).getThreadLocalVariables();
@@ -58,10 +58,10 @@ public class TradePosterLayout extends VerticalLayout {
     }
 
     public void addUserOffer(){
-        UserOfferLayout userOffer = new UserOfferLayout();
-        userOffer.setOnDeleteUserOfferListener(userOfferLayout -> {
-            userOfferList.remove(userOfferLayout);
-            userOfferContainer.removeComponent(userOfferLayout);
+        TradePreviewLayout userOffer = new TradePreviewLayout();
+        userOffer.setOnDeleteUserOfferListener(tradePreviewLayout -> {
+            userOfferList.remove(tradePreviewLayout);
+            userOfferContainer.removeComponent(tradePreviewLayout);
         });
         userOfferList.add(userOffer);
         userOfferContainer.addComponent(userOffer);
