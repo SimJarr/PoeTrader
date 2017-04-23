@@ -4,14 +4,14 @@ import se.simjarr.global.Currency;
 
 import java.math.BigDecimal;
 
-public class Ratio {
+public class EstimatedValuesRatio {
 
     private Currency currency;
     private double ratio;
     private boolean flipped;
     private int row;
 
-    public Ratio(Currency currency, double ratio, boolean flipped, int row) {
+    public EstimatedValuesRatio(Currency currency, double ratio, boolean flipped, int row) {
         this.currency = currency;
         this.ratio = ratio;
         this.flipped = (ratio == -1) != flipped;
