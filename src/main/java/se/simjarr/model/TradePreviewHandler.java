@@ -22,13 +22,13 @@ public class TradePreviewHandler {
     public List<TradePreview> getTradePreviews() {
         List<TradePreview> tradePreviews = new ArrayList<>();
         for(double i = firstPositionPricePerUnit; i < firstPositionPricePerUnit + 1; i += 0.05) {
-
+            i = Math.round(i*100.0)/100.0;
             int sellValue = calculateSellValue(i);
             int buyValue = (int)(sellValue * i);
 
             TradeOffer temp = new TradeOffer(null, sellCurrency.getStringValue(), String.valueOf(sellValue), buyCurrency.getStringValue(), String.valueOf(buyValue), null, "");
 
-            TradePreview tradePreview = new TradePreview(findPosition(i), sellValue, buyValue, temp.calculateTradeValue());
+            TradePreview tradePreview = new TradePreview(findPosition(i), sellValue, buyValue, temp.calculateTradeValue()/sellValue * -1);
             tradePreviews.add(tradePreview);
         }
         return tradePreviews;
