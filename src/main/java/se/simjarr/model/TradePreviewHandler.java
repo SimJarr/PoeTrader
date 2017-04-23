@@ -14,10 +14,9 @@ public class TradePreviewHandler {
 
     public TradePreviewHandler(Currency sellCurrency, Currency buyCurrency) {
         tradeOffers = TradeBank.selectTrades(buyCurrency, sellCurrency, null, null);
-        //tradeOffers.sort(TradeOffer.sortByValue);
         this.sellCurrency = sellCurrency;
         this.buyCurrency = buyCurrency;
-        firstPositionPricePerUnit = findFirstPosition();
+        firstPositionPricePerUnit = findFirstPositionPricePerUnit();
     }
 
     public List<TradePreview> getTradePreviews() {
@@ -59,7 +58,7 @@ public class TradePreviewHandler {
         return position;
     }
 
-    private double findFirstPosition() {
+    private double findFirstPositionPricePerUnit() {
         TradeOffer currentFirstPosition = tradeOffers.get(0);
         double currentPricePerUnit = currentFirstPosition.getPricePerUnit();
 
@@ -75,6 +74,7 @@ public class TradePreviewHandler {
         nextLowerPrice -= nextHundredth;
         nextLowerPrice /= 100;
 
+        nextLowerPrice = Math.round(nextLowerPrice*100.0)/100.0;
         return nextLowerPrice;
     }
 }
