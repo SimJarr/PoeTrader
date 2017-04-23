@@ -55,7 +55,6 @@ public abstract class TradeBank {
     }
 
     private static double findOneWayRatio(List<TradeOffer> tradeCurrency, int size) {
-
         double value = 0;
         for(int i = 0; i < size; i++) {
             value += tradeCurrency.get(i).getReferenceRatio();
