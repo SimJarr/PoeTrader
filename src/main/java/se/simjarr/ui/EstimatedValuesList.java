@@ -43,15 +43,15 @@ public class EstimatedValuesList extends GridLayout {
     }
 
     void fetchRatios() {
-        List<Ratio> ratios = new ArrayList<>();
+        List<EstimatedValuesRatio> estimatedValuesRatios = new ArrayList<>();
         TradeBank.refreshTrades(threadLocalVariables.getSelectedLeague(), true);
 
         for (int i = 0; i < this.getRows(); i++) {
             if (i != REFERENCE_CURRENCY.getIntValue() - 1) {
-                ratios.add(createRatio(Currency.fromValue(i + 1), 5, i));
+                estimatedValuesRatios.add(createRatio(Currency.fromValue(i + 1), 5, i));
             }
         }
-        updateRatios(ratios);
+        updateRatios(estimatedValuesRatios);
     }
 
     private void generateMatrixGrid(final int rows) {
@@ -73,15 +73,15 @@ public class EstimatedValuesList extends GridLayout {
         }
     }
 
-    private Ratio createRatio(Currency currency, int sampleSize, int row) {
+    private EstimatedValuesRatio createRatio(Currency currency, int sampleSize, int row) {
         double estimatedValue = TradeBank.estimateValue(currency, sampleSize);
 
-        return new Ratio(currency, estimatedValue, estimatedValue < 1, row);
+        return new EstimatedValuesRatio(currency, estimatedValue, estimatedValue < 1, row);
     }
 
-    private void updateRatios(List<Ratio> ratios) {
+    private void updateRatios(List<EstimatedValuesRatio> estimatedValuesRatios) {
 
-        for (Ratio r : ratios) {
+        for (EstimatedValuesRatio r : estimatedValuesRatios) {
 
             String color = "#000000"; //black
             if (threadLocalVariables.getEstimatedValues().get(r.getCurrency()) != null && threadLocalVariables.getEstimatedValues().get(r.getCurrency()) > (1 / r.getRatio())) {
