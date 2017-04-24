@@ -110,9 +110,13 @@ public class TradePreviewLayout extends HorizontalLayout {
                     slider = null;
                 }
                 if(!buyCurrency.getValue().equals(sellCurrency.getValue())) {
-                    TradePreviewHandler tradePreviewHandler = new TradePreviewHandler(getSellCurrency(), getBuyCurrency());
-                    setTradePreviews(tradePreviewHandler.getTradePreviews());
-                    addSlider();
+                    try  {
+                        TradePreviewHandler tradePreviewHandler = new TradePreviewHandler(getSellCurrency(), getBuyCurrency());
+                        setTradePreviews(tradePreviewHandler.getTradePreviews());
+                        addSlider();
+                    } catch (IndexOutOfBoundsException e) {
+                        System.out.println("No available trades");
+                    }
                 }
             }
         }
