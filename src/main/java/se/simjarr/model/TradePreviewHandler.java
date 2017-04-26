@@ -38,12 +38,11 @@ public class TradePreviewHandler {
                 TradeOffer temp = new TradeOffer(null, sellCurrency.getStringValue(), String.valueOf(sellValue), buyCurrency.getStringValue(), String.valueOf(buyValue), null, "");
                 tradePreview = new TradePreview(findPosition(i), sellValue, buyValue, temp.calculateTradeValue() / buyValue * -1);
             } else {
-                i = Math.round(i*100.0)/100.0;
+                i = Math.round(i * 100.0) / 100.0;
                 int sellValue = calculateSellValue(i);
-                int buyValue = (int)(sellValue * i);
+                int buyValue = (int) (sellValue * i);
                 TradeOffer temp = new TradeOffer(null, sellCurrency.getStringValue(), String.valueOf(sellValue), buyCurrency.getStringValue(), String.valueOf(buyValue), null, "");
-                tradePreview = new TradePreview(findPosition(i), sellValue, buyValue, temp.calculateTradeValue()/sellValue * -1);
-                tradePreviews.add(tradePreview);
+                tradePreview = new TradePreview(findPosition(i), sellValue, buyValue, temp.calculateTradeValue() / sellValue * -1);
             }
             tradePreviews.add(tradePreview);
         }
@@ -84,14 +83,16 @@ public class TradePreviewHandler {
 
     private double findNextLowerPrice(double currentPricePerUnit, int relevantDecimal) {
         int currentDecimal = findNthDecimal(currentPricePerUnit, relevantDecimal);
-        int nextDecimal = (currentDecimal > 5 || currentDecimal == 0) ? 5 : 0;
-
-        String nextLowerPrice = (int) currentPricePerUnit + ".";
-        for (int i = 1; i < relevantDecimal; i++) {
-            nextLowerPrice += findNthDecimal(currentPricePerUnit, i);
+        int nextDecimal = (currentDecimal > 5) ? 5 : 0;
+        if (currentDecimal != 0) {
+            StringBuilder result = new StringBuilder((int) currentPricePerUnit + ".");
+            for (int i = 1; i < relevantDecimal; i++) {
+                result.append(findNthDecimal(currentPricePerUnit, i));
+            }
+            result.append(nextDecimal);
+            return Double.parseDouble(result.toString());
         }
-        nextLowerPrice += nextDecimal;
-        return Double.parseDouble(nextLowerPrice);
+        return (relevantDecimal == 2) ? currentPricePerUnit - 0.05 : currentPricePerUnit - 0.0005;
     }
 
     // TODO: rename
